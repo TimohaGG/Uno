@@ -8,9 +8,8 @@ namespace Uno_V2.Core
 {
     public class DeckCreator
     {
+        //----------fileds----------
         private Card[] deck;
-        private int WildCardsAmount = 4;
-        private int ColoredCardsAmount = 52;
         private int ColorNumber = 4;
         private ConsoleColor[] ColorVariants = new ConsoleColor[5]
         {
@@ -18,7 +17,7 @@ namespace Uno_V2.Core
             ConsoleColor.Green,
             ConsoleColor.Red,
             ConsoleColor.Yellow,
-            ConsoleColor.Black
+            ConsoleColor.Gray
         };
         private string[] CardsSuits = new string[13]
         {
@@ -28,10 +27,14 @@ namespace Uno_V2.Core
         {
              "ChC","+ 2"
         };
+
+        //----------constructor----------
         public DeckCreator(Card[] deck)
         {
             this.deck = deck;
         }
+
+        //----------methods----------
         public Card[] CreateDeck()
         {
             AddColoredCards();
@@ -39,8 +42,6 @@ namespace Uno_V2.Core
             Reshuffle();
             return deck;
         }
-
-        
 
         private void AddColoredCards()
         {
@@ -64,6 +65,7 @@ namespace Uno_V2.Core
             }
             
         }
+
         private void Reshuffle()
         {
             Random rand = new Random();

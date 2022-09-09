@@ -7,7 +7,8 @@ namespace Uno_V2
         static void Main(string[] args)
         {
             Deck deck = new Deck();
-            deck.CreateDeck();
+            deck.Create();
+            deck.Print();
         }
     }
 }
