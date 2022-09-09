@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Uno_V2.Core;
 
 namespace Uno_V2
 {
@@ -10,6 +6,8 @@ namespace Uno_V2
     {
         static void Main(string[] args)
         {
+            Deck deck = new Deck();
+            deck.CreateDeck();
         }
     }
 }
