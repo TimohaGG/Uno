@@ -72,9 +72,9 @@ namespace Uno_V2.Core
             Card tmp;
             int randValue;
             
-            for (int i = 0; i < 55; i++)
+            for (int i = 0; i < deck.Length; i++)
             {
-                randValue = rand.Next(0, 55);
+                randValue = rand.Next(0, deck.Length);
                 tmp = deck[i];
                 deck[i] = deck[randValue];
                 deck[randValue] = tmp;

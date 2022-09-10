@@ -1,32 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Uno_V2.Core
 {
-    public class Deck
+    [Serializable]
+    public class Deck : ISerializable
     {
-        public Card[] card { get; private set; }
+        public Card[] cards { get; private set; }
+
+        public string name { get; } = "Deck.txt";
+
         private int Size=56;
         public Deck()
         {
-            card = new Card[Size];
+            cards = new Card[Size];
         }
 
         public void Create()
         {
-            DeckCreator deckCreator = new DeckCreator(card);
-            card = deckCreator.CreateDeck();
+            DeckCreator deckCreator = new DeckCreator(cards);
+            cards = deckCreator.CreateDeck();
         }
 
-        public void Print() {
-            for (int i = 0; i < Size; i++)
-            {
-                card[i].Print();
-            }
-        }
+        
+        //public void Print() {
+
+        //    for (int i = 0; i < Size; i++)
+        //    {
+        //        card[i].Print();
+
+        //    }
+        //}
 
     }
 }

@@ -46,6 +46,9 @@
     <Compile Include="Core\Card.cs" />
     <Compile Include="Core\Deck.cs" />
     <Compile Include="Core\DeckCreator.cs" />
+    <Compile Include="Core\ISerializable.cs" />
+    <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Serialaizator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

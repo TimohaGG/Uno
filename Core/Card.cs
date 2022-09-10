@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Uno_V2.Core
 {
-    public class Card
+    [Serializable]
+    public class Card : ISerializable
     {
         //----------fileds----------
         public bool isChoosen { get; private set; }
         public string Suit { get; private set; }
         public ConsoleColor Color { get; private set; }
+
+        public string name { get; } = "Card.txt";
 
         //----------constructor----------
         public Card()
@@ -30,14 +29,18 @@ namespace Uno_V2.Core
         //----------methods----------
         public void Print()
         {
+            
            
             Console.ForegroundColor = Color;
 
             Console.WriteLine("*****");
+            
             Console.WriteLine($"*{Suit}*");
+            
             Console.WriteLine("*****");
-
+           
             Console.ResetColor();
+           
         }
     }
 }

@@ -8,7 +8,15 @@ namespace Uno_V2
         {
             Deck deck = new Deck();
             deck.Create();
-            deck.Print();
+            //deck.Print();
+            Serialaizator serialaizator = new Serialaizator();
+
+
+            
+            serialaizator.Serialize("deck.txt", deck);
+            deck = (Deck)serialaizator.Deserialize( deck);
+           
         }
+
     }
 }
