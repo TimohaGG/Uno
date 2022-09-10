@@ -24,7 +24,7 @@ namespace Uno_V2.Core
         public object Deserialize(ISerializable ob)
         {
             
-            stream = new FileStream(ob.name, FileMode.Open, FileAccess.Read);
+            stream = new FileStream(ob.FileName, FileMode.Open, FileAccess.Read);
             ob = (ISerializable)formatter.Deserialize(stream);
             stream.Close();
             return ob;

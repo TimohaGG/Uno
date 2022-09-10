@@ -10,7 +10,7 @@ namespace Uno_V2.Core
         public string Suit { get; private set; }
         public ConsoleColor Color { get; private set; }
 
-        public string name { get; } = "Card.txt";
+        public string FileName { get; } = "Card.txt";
 
         //----------constructor----------
         public Card()
@@ -27,18 +27,18 @@ namespace Uno_V2.Core
         }
 
         //----------methods----------
-        public void Print()
+        public void Print(int x, int y)
         {
             
            
             Console.ForegroundColor = Color;
 
             Console.WriteLine("*****");
-            
+            Console.SetCursorPosition(x, ++y);
             Console.WriteLine($"*{Suit}*");
-            
+            Console.SetCursorPosition(x, ++y);
             Console.WriteLine("*****");
-           
+            Console.SetCursorPosition(x, ++y);
             Console.ResetColor();
            
         }

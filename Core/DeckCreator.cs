@@ -45,9 +45,9 @@ namespace Uno_V2.Core
 
         private void AddColoredCards()
         {
-            for (int i = 0, cardN = 0, colorN = 0; i < ColorNumber; i++, colorN++)
+            for (int cardN = 0, colorN = 0; colorN < ColorNumber; colorN++)
             {
-                for (int j = 0, suitN = 0; j < CardsSuits.Length; j++)
+                for (int suitN = 0; suitN < CardsSuits.Length; )
                 {
                     deck[cardN++] = new Card(CardsSuits[suitN++], ColorVariants[colorN]);
                 }

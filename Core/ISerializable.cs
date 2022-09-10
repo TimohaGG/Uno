@@ -8,6 +8,6 @@ namespace Uno_V2.Core
 {
     internal interface ISerializable
     {
-        string name { get; }
+        string FileName { get; }
     }
 }
