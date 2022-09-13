@@ -7,12 +7,13 @@ namespace Uno_V2
         static void Main(string[] args)
         {
            
-            Player player = new Player();
             Player player1 = new Player();
+            Player player2 = new Player();
 
-            player.PrintCards();
-            Console.SetCursorPosition(0, 10);
-            player1.PrintCards();
+            player1.PrintCards(true);
+            Console.SetCursorPosition(0, 6);
+            Console.SetCursorPosition(0, 14);
+            player2.PrintCards();
             Console.ReadLine();
         }
 

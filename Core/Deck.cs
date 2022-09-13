@@ -36,14 +36,7 @@ namespace Uno_V2.Core
             Size-=number;
         }
         
-        //public void Print() {
-
-        //    for (int i = 0; i < Size; i++)
-        //    {
-        //        card[i].Print();
-
-        //    }
-        //}
+       
 
     }
 }

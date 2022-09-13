@@ -10,12 +10,12 @@ namespace Uno_V2.Core
     [Serializable]
     public class Player : ISerializable
     {
-        public string FileName { get; private set; } = "Player.txt";
-
-        static public Deck Deck;
-
+        public string FileName { get; } = "Player.txt";
         public Card[] Cards;
-        private int CardsAmount = 7;
+        private Card EmptyCard;
+        private int CardsAmount = 6;
+        private static Deck Deck;
+        
 
         static Player()
         {
@@ -25,6 +25,7 @@ namespace Uno_V2.Core
         {
             Cards = new Card[CardsAmount];
             GiveCardsFromDeck(CardsAmount);
+            EmptyCard = new Card();
         }
 
         public void GiveCardsFromDeck(int amount)
@@ -36,17 +37,24 @@ namespace Uno_V2.Core
             Deck.DeleteCards(amount);
         }
 
-        public void PrintCards()
+        public void PrintCards(bool isEmpty = false)
         {
             int x=0;
             int y = Console.CursorTop;
             for (int i = 0; i < CardsAmount; i++)
             {
                 x = Console.CursorLeft;
-                
-                Cards[i].Print(x,y);
-                x += 7;
 
+                if (isEmpty)
+                {
+                    EmptyCard.Print(x,y);
+                }
+                else
+                {
+                    Cards[i].Print(x, y);
+                }
+                
+                x += 7;
                 Console.SetCursorPosition(x, y);
             }
             Console.SetCursorPosition(0,y+3);
