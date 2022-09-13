@@ -13,28 +13,32 @@ namespace Uno_V2.Core
         public string FileName { get; } = "Player.txt";
         public Card[] Cards;
         private Card EmptyCard;
-        private int CardsAmount = 6;
-        private static Deck Deck;
-        
+        private int CardsAmount = 7;
+        private static Deck deck;
+        private static Deck endDeck;
 
         static Player()
         {
-            Deck = new Deck();
+            deck = new Deck(56);
+            deck.CreateFirst();
+            endDeck = new Deck(1);
+            endDeck.AddCardFrom(deck);
         }
         public Player()
         {
             Cards = new Card[CardsAmount];
-            GiveCardsFromDeck(CardsAmount);
+            GiveCardsFromDeckToPlayer(CardsAmount);
             EmptyCard = new Card();
+            
         }
 
-        public void GiveCardsFromDeck(int amount)
+        public void GiveCardsFromDeckToPlayer(int amount)
         {
             for (int i = 0; i < amount; i++)
             {
-                Cards[i] = Deck.Cards[i];
+                Cards[i] = deck.Cards[i];
             }
-            Deck.DeleteCards(amount);
+            deck.DeleteCards(amount);
         }
 
         public void PrintCards(bool isEmpty = false)
@@ -61,5 +65,110 @@ namespace Uno_V2.Core
             
         }
 
+        public static void PrintEndDeck()
+        {
+            Console.SetCursorPosition(21, 7);
+            endDeck.Cards[endDeck.Cards.Length - 1].Print(21,7);
+        }
+
+        public int ChooseCard()
+        {
+            
+            ChoosingMarker marker = new ChoosingMarker();
+            ConsoleKey key;
+
+            PrintChooser(marker);
+            while (true)
+            {
+                key = Console.ReadKey().Key;
+                if (!TryMooving(marker, ref key))
+                {
+                    marker.SetConsolePosition();
+                }
+                else
+                {
+                    if (key == ConsoleKey.Enter)
+                    {
+                        Console.WriteLine(marker.index);
+                        return marker.index;
+                    }
+                       
+                }
+            }
+
+        }
+
+        public void PrintChooser(ChoosingMarker pt)
+        {
+            Console.SetCursorPosition(pt.x, pt.y);
+            pt.PrintMarker();
+        }
+
+        public bool TryMooving(ChoosingMarker pt ,ref ConsoleKey key)
+        {
+            switch (key)
+            {
+                case ConsoleKey.LeftArrow:
+                    {
+                        return MoveLeft(ref pt);
+                    }
+                    
+                case ConsoleKey.RightArrow:
+                    {
+                        return MoveRight(ref pt);
+                    }
+
+                case ConsoleKey.Enter:
+                    {
+                        return true;
+                    }
+                default:
+                    {
+                        pt.SetConsolePosition();
+                        return false;
+                    }
+                    
+            }
+        }
+
+        public bool MoveLeft(ref ChoosingMarker pt)
+        {
+            if (pt.index - 1 >= 0)
+            {
+                DeleteOldSelection();
+                pt.MoveXLeft();
+                pt.index--;
+                
+                PrintChooser(pt);
+                return true;
+            }
+            return false;
+        }
+
+        public bool MoveRight(ref ChoosingMarker pt)
+        {
+            if (pt.index + 1 < CardsAmount)
+            {
+                DeleteOldSelection();
+                pt.MoveXRight();
+                pt.index++;
+                
+                PrintChooser(pt);
+                return true;
+            }
+            return false;
+        }
+
+        public void DeleteOldSelection()
+        {
+            int x = Console.CursorLeft;
+            int y = Console.CursorTop;
+            Console.SetCursorPosition(x - 2, y);
+            Console.Write(" ");
+        }
+        
+
+        
+        
     }
 }

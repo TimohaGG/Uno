@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooserPoint.cs" />
     <Compile Include="Core\Card.cs" />
     <Compile Include="Core\Deck.cs" />
     <Compile Include="Core\DeckCreator.cs" />

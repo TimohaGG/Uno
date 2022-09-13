@@ -42,5 +42,10 @@ namespace Uno_V2.Core
             Console.ResetColor();
            
         }
+
+        public void ChangeChoosed()
+        {
+            isChoosen = isChoosen ? false : true;
+        }
     }
 }

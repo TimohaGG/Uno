@@ -9,11 +9,22 @@ namespace Uno_V2
            
             Player player1 = new Player();
             Player player2 = new Player();
+            while (true)
+            {
+                player1.PrintCards(true);
+               
+                Player.PrintEndDeck();
+                Console.SetCursorPosition(0, 14);
+                player2.PrintCards();
 
-            player1.PrintCards(true);
-            Console.SetCursorPosition(0, 6);
-            Console.SetCursorPosition(0, 14);
-            player2.PrintCards();
+                int index = player2.ChooseCard();
+                player2.Cards[index].ChangeChoosed();
+
+                (player1,player2) = (player2,player1);
+                
+                Console.Clear();
+            }
+            
             Console.ReadLine();
         }
 

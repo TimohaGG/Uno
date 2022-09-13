@@ -12,14 +12,15 @@ namespace Uno_V2.Core
 
         public string FileName { get; } = "Deck.txt";
 
-        private int Size=56;
-        public Deck()
+        private int Size;
+        public Deck(int Size)
         {
+            this.Size = Size;
             Cards = new Card[Size];
-            Create();
+            
         }
 
-        private void Create()
+        public void CreateFirst()
         {
             DeckCreator deckCreator = new DeckCreator(Cards);
             Cards = deckCreator.CreateDeck();
@@ -35,7 +36,12 @@ namespace Uno_V2.Core
             Cards = tmp;
             Size-=number;
         }
-        
+
+        public void AddCardFrom (Deck deck)
+        {
+            Cards[Size - 1] = deck.Cards[0];
+            deck.DeleteCards(1);
+        }
        
 
     }
