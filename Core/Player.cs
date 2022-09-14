@@ -11,6 +11,7 @@ namespace Uno_V2.Core
     public class Player : ISerializable
     {
         public string FileName { get; } = "Player.txt";
+
         public Card[] Cards;
         private Card EmptyCard;
         private int CardsAmount = 7;
@@ -32,7 +33,7 @@ namespace Uno_V2.Core
             
         }
 
-        public void GiveCardsFromDeckToPlayer(int amount)
+        private void GiveCardsFromDeckToPlayer(int amount)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -70,7 +71,7 @@ namespace Uno_V2.Core
             Console.SetCursorPosition(21, 7);
             endDeck.Cards[endDeck.Cards.Length - 1].Print(21,7);
         }
-
+        
         public int ChooseCard()
         {
             
@@ -85,26 +86,24 @@ namespace Uno_V2.Core
                 {
                     marker.SetConsolePosition();
                 }
-                else
-                {
-                    if (key == ConsoleKey.Enter)
+               
+                    else if (key == ConsoleKey.Enter)
                     {
-                        Console.WriteLine(marker.index);
+                        
                         return marker.index;
                     }
                        
-                }
             }
 
         }
 
-        public void PrintChooser(ChoosingMarker pt)
+        private void PrintChooser(ChoosingMarker pt)
         {
             Console.SetCursorPosition(pt.x, pt.y);
             pt.PrintMarker();
         }
 
-        public bool TryMooving(ChoosingMarker pt ,ref ConsoleKey key)
+        private bool TryMooving(ChoosingMarker pt ,ref ConsoleKey key)
         {
             switch (key)
             {
@@ -131,7 +130,7 @@ namespace Uno_V2.Core
             }
         }
 
-        public bool MoveLeft(ref ChoosingMarker pt)
+        private bool MoveLeft(ref ChoosingMarker pt)
         {
             if (pt.index - 1 >= 0)
             {
@@ -145,7 +144,7 @@ namespace Uno_V2.Core
             return false;
         }
 
-        public bool MoveRight(ref ChoosingMarker pt)
+        private bool MoveRight(ref ChoosingMarker pt)
         {
             if (pt.index + 1 < CardsAmount)
             {
@@ -159,7 +158,7 @@ namespace Uno_V2.Core
             return false;
         }
 
-        public void DeleteOldSelection()
+        private void DeleteOldSelection()
         {
             int x = Console.CursorLeft;
             int y = Console.CursorTop;
@@ -167,8 +166,37 @@ namespace Uno_V2.Core
             Console.Write(" ");
         }
         
+        public bool TryUseCard(int index)
+        {
+            if (CanBeat(Cards[index]))
+            {
+                Console.WriteLine("Can beat!!!");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("Can not beat!!!");
+                Console.ReadLine();
+            }
+            return false;
+        }
 
-        
-        
+        private bool CanBeat(Card toUse)
+        {
+            int LastIndex = endDeck.Cards.Length - 1;
+            
+            if (toUse.Suit == endDeck.Cards[LastIndex].Suit)
+            {
+                return true;
+            }
+            else if(toUse.Color == endDeck.Cards[LastIndex].Color)
+            {
+                return true;
+            }
+            else if(toUse.Color == ConsoleColor.Gray) {
+                return true;
+            }
+            return false;
+        }
     }
 }

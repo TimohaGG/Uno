@@ -18,10 +18,10 @@ namespace Uno_V2
                 player2.PrintCards();
 
                 int index = player2.ChooseCard();
-                player2.Cards[index].ChangeChoosed();
 
+                player2.TryUseCard(index);
                 (player1,player2) = (player2,player1);
-                
+               
                 Console.Clear();
             }
             

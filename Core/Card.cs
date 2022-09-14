@@ -6,7 +6,6 @@ namespace Uno_V2.Core
     public class Card : ISerializable
     {
         //----------fileds----------
-        public bool isChoosen { get; private set; }
         public string Suit { get; private set; }
         public ConsoleColor Color { get; private set; }
 
@@ -15,7 +14,7 @@ namespace Uno_V2.Core
         //----------constructor----------
         public Card()
         {
-            isChoosen = false;
+            
             Suit = "   ";
             Color = ConsoleColor.Gray;
         }
@@ -43,9 +42,6 @@ namespace Uno_V2.Core
            
         }
 
-        public void ChangeChoosed()
-        {
-            isChoosen = isChoosen ? false : true;
-        }
+        
     }
 }
