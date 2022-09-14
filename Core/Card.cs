@@ -11,18 +11,26 @@ namespace Uno_V2.Core
 
         public string FileName { get; } = "Card.txt";
 
+        public CardType Type { get; private set; }
+        public enum CardType
+        {
+            Regular,
+            Special,
+            Wild
+        }
+
         //----------constructor----------
         public Card()
         {
-            
             Suit = "   ";
             Color = ConsoleColor.Gray;
         }
 
-        public Card(string Suit, ConsoleColor Color)
+        public Card(string Suit, ConsoleColor Color, CardType Type)
         {
             this.Suit = Suit;
             this.Color = Color;
+            this.Type = Type;
         }
 
         //----------methods----------

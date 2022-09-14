@@ -11,17 +11,25 @@ namespace Uno_V2.Core
         //----------fileds----------
         private Card[] deck;
         private int ColorNumber = 4;
-        private ConsoleColor[] ColorVariants = new ConsoleColor[5]
+        private ConsoleColor[] ColorVariants = new ConsoleColor[4]
         {
             ConsoleColor.Blue,
             ConsoleColor.Green,
             ConsoleColor.Red,
-            ConsoleColor.Yellow,
+            ConsoleColor.Yellow
+        };
+        private ConsoleColor[] WildColor = new ConsoleColor[2]
+        {
+            ConsoleColor.Gray,
             ConsoleColor.Gray
         };
-        private string[] CardsSuits = new string[13]
+        private string[] CardsSuits = new string[10]
         {
-            " 0 "," 1 "," 2 "," 3 "," 4 "," 5 ", " 6 "," 7 "," 8 "," 9 ","+ 1","ChD"," S "
+            " 0 "," 1 "," 2 "," 3 "," 4 "," 5 ", " 6 "," 7 "," 8 "," 9 "
+        };
+        private string[] SpecialCardsSuits = new string[3]
+        {
+            "+ 1","ChD"," S "
         };
         private string[] WildCardSuits = new string[2]
         {
@@ -37,33 +45,25 @@ namespace Uno_V2.Core
         //----------methods----------
         public Card[] CreateDeck()
         {
-            AddColoredCards();
-            AddWildCards();
+            //dColoredCards();
+            AddCards(CardsSuits,ColorVariants,0, Card.CardType.Regular);
+            AddCards(SpecialCardsSuits, ColorVariants, 40, Card.CardType.Special);
+            AddCards(WildCardSuits, WildColor, 52, Card.CardType.Wild);
+            
             Reshuffle();
             return deck;
         }
 
-        private void AddColoredCards()
+        
+        private void AddCards(string[] suits, ConsoleColor []colors, int CardNum, Card.CardType Type)
         {
-            for (int cardN = 0, colorN = 0; colorN < ColorNumber; colorN++)
+            for (int colorN = 0; colorN < colors.Length; colorN++)
             {
-                for (int suitN = 0; suitN < CardsSuits.Length; )
+                for (int suitN = 0; suitN < suits.Length;)
                 {
-                    deck[cardN++] = new Card(CardsSuits[suitN++], ColorVariants[colorN]);
+                    deck[CardNum++] = new Card(suits[suitN++], colors[colorN], Type);
                 }
             }
-        }
-
-        private void AddWildCards()
-        {
-            for (int i = 0, cardN=52; i < 2; i++)
-            {
-                for (int j = 0, suitN = 0; j < WildCardSuits.Length; j++)
-                {
-                    deck[cardN++] = new Card(WildCardSuits[suitN++], ColorVariants[4]);
-                }
-            }
-            
         }
 
         private void Reshuffle()
