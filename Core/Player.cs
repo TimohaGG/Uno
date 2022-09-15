@@ -31,6 +31,8 @@ namespace Uno_V2.Core
             
         }
 
+        
+
         private void GiveCardsFromDeckToPlayer(int amount)
         {
             Card[] cardsTmp = new Card[CardsAmount+amount];
@@ -80,24 +82,20 @@ namespace Uno_V2.Core
             
             ChoosingMarker marker = new ChoosingMarker();
             ConsoleKey key;
-
-            PrintChooser(marker);
-            while (true)
+            do
             {
-                key = Console.ReadKey().Key;
-                if (!TryMooving(marker, ref key))
+                PrintChooser(marker);
+                do
                 {
-                    marker.SetConsolePosition();
-                }
-               
-                    else if (key == ConsoleKey.Enter)
+                    key = Console.ReadKey().Key;
+                    if (!TryMooving(marker, ref key))
                     {
-                        
-                        return marker.index;
+                        marker.SetConsolePosition();
                     }
-                       
-            }
 
+                } while (key != ConsoleKey.Enter);
+            } while (!CanBeat(Cards[marker.index]));
+            return marker.index;
         }
 
         private void PrintChooser(ChoosingMarker pt)
@@ -169,22 +167,7 @@ namespace Uno_V2.Core
             Console.Write(" ");
         }
         
-        public bool TryUseCard(int index)
-        {
-            if (CanBeat(Cards[index]))
-            {
-                Console.WriteLine("Can beat!!!");
-                Console.ReadLine();
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Can not beat!!!");
-                Console.ReadLine();
-                return false;
-            }
-            
-        }
+        
 
         private bool CanBeat(Card toUse)
         {
@@ -204,39 +187,34 @@ namespace Uno_V2.Core
             return false;
         }
 
-        public void ApplyCardProperty(Card CurrentCard, Player enemy)
+        public void ApplyCardProperty(Card CurrentCard, ref Player enemy)
         {
-            if(CurrentCard.Suit== "+ 1")
+            if (CurrentCard.Suit == "+ 1")
             {
                 enemy.GiveCardsFromDeckToPlayer(1);
             }
             else if (CurrentCard.Suit == "ChD")
             {
-                SwitchPlayers(enemy);
-                
+                SwitchPlayers(this,enemy);
+
             }
-            else if(CurrentCard.Suit == " S ")
+            else if (CurrentCard.Suit == " S ")
             {
-                SwitchPlayers(enemy);
+                SwitchPlayers(this,enemy);
             }
             else if (CurrentCard.Suit == "ChC")
             {
 
             }
-            else if(CurrentCard.Suit == "+ 2")
+            else if (CurrentCard.Suit == "+ 2")
             {
                 enemy.GiveCardsFromDeckToPlayer(2);
             }
         }
 
-        private void SwitchPlayers(Player enemy)
+        public static void SwitchPlayers(Player player1, Player player2)
         {
-            var tmp = enemy;
-            enemy = this;
-            this.FileName = tmp.FileName;
-            this.Cards = tmp.Cards;
-            this.CardsAmount = tmp.CardsAmount;
-
+            (player1,player2) = (player2,player1);
         }
     }
 }
