@@ -27,8 +27,11 @@ namespace Uno_V2.Core
         public void DeleteCards(int number)
         {
             Card[] tmp = new Card[Size-number];
-            Array.Copy(Cards, 1, tmp,0 ,tmp.Length);
-            
+            Array.Copy(Cards, number, tmp,0 ,tmp.Length);
+            //for (int i = number-1,j = 0; i < Size - number; i++, j++)
+            //{
+            //    tmp[j] = Cards[i];
+            //}
             Cards = tmp;
             Size-=number;
         }
