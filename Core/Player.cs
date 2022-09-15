@@ -195,12 +195,12 @@ namespace Uno_V2.Core
             }
             else if (CurrentCard.Suit == "ChD")
             {
-                SwitchPlayers(this,enemy);
+                //SwitchPlayers(this,enemy);
 
             }
             else if (CurrentCard.Suit == " S ")
             {
-                SwitchPlayers(this,enemy);
+                //SwitchPlayers(this,enemy);
             }
             else if (CurrentCard.Suit == "ChC")
             {
@@ -212,7 +212,7 @@ namespace Uno_V2.Core
             }
         }
 
-        public static void SwitchPlayers(Player player1, Player player2)
+        public static void SwitchPlayers( ref Player player1,  ref Player player2)
         {
             (player1,player2) = (player2,player1);
         }

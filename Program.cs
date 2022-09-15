@@ -27,10 +27,14 @@ namespace Uno_V2
                   if (player2.Cards[index].Type != Card.CardType.Regular)
                   {
                       player2.ApplyCardProperty(player2.Cards[index], ref player1);
+                      
                   }
+                else
+                {
+                    Player.SwitchPlayers(ref player1, ref player2);
+                }
 
-
-                Player.SwitchPlayers(player1, player2);
+                
                
                 Console.Clear();
             }
