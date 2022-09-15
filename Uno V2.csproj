@@ -43,6 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ChooserPoint.cs" />
+    <Compile Include="Core\Card.cs" />
+    <Compile Include="Core\CardsCharacteristics\CardsCharasteristics.cs" />
+    <Compile Include="Core\CardsCharacteristics\ICharacterisable.cs" />
+    <Compile Include="Core\CardsCharacteristics\RegularCardInfo.cs" />
+    <Compile Include="Core\CardsCharacteristics\SpecialCardsInfo.cs" />
+    <Compile Include="Core\CardsCharacteristics\WildCardsInfo.cs" />
+    <Compile Include="Core\Deck.cs" />
+    <Compile Include="Core\DeckCreator.cs" />
+    <Compile Include="Core\Serialization\ISerializable.cs" />
+    <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Serialization\Serialaizator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
