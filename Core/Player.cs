@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 
 namespace Uno_V2.Core
@@ -10,11 +7,11 @@ namespace Uno_V2.Core
     [Serializable]
     public class Player : ISerializable
     {
-        public string FileName { get; } = "Player.txt";
+        public string FileName { get; private set; } 
 
         public Card[] Cards;
         private Card EmptyCard;
-        private int CardsAmount = 7;
+        private int CardsAmount = 0;
         private static Deck deck;
         private static Deck endDeck;
 
@@ -25,20 +22,26 @@ namespace Uno_V2.Core
             endDeck = new Deck(1);
             endDeck.AddCardFrom(deck);
         }
-        public Player()
+        public Player(string Filename)
         {
+            this.FileName = Filename;
             Cards = new Card[CardsAmount];
-            GiveCardsFromDeckToPlayer(CardsAmount);
+            GiveCardsFromDeckToPlayer(7);
             EmptyCard = new Card();
             
         }
 
         private void GiveCardsFromDeckToPlayer(int amount)
         {
-            for (int i = 0; i < amount; i++)
+            Card[] cardsTmp = new Card[CardsAmount+amount];
+            Array.Copy(Cards, cardsTmp, Cards.Length);
+            
+            for (int i = CardsAmount, j=0; i < CardsAmount + amount; i++,j++)
             {
-                Cards[i] = deck.Cards[i];
+                cardsTmp[i] = deck.Cards[j];
             }
+            Cards = cardsTmp;
+            CardsAmount += amount;
             deck.DeleteCards(amount);
         }
 
@@ -172,13 +175,15 @@ namespace Uno_V2.Core
             {
                 Console.WriteLine("Can beat!!!");
                 Console.ReadLine();
+                return true;
             }
             else
             {
                 Console.WriteLine("Can not beat!!!");
                 Console.ReadLine();
+                return false;
             }
-            return false;
+            
         }
 
         private bool CanBeat(Card toUse)
@@ -197,6 +202,41 @@ namespace Uno_V2.Core
                 return true;
             }
             return false;
+        }
+
+        public void ApplyCardProperty(Card CurrentCard, Player enemy)
+        {
+            if(CurrentCard.Suit== "+ 1")
+            {
+                enemy.GiveCardsFromDeckToPlayer(1);
+            }
+            else if (CurrentCard.Suit == "ChD")
+            {
+                SwitchPlayers(enemy);
+                
+            }
+            else if(CurrentCard.Suit == " S ")
+            {
+                SwitchPlayers(enemy);
+            }
+            else if (CurrentCard.Suit == "ChC")
+            {
+
+            }
+            else if(CurrentCard.Suit == "+ 2")
+            {
+                enemy.GiveCardsFromDeckToPlayer(2);
+            }
+        }
+
+        private void SwitchPlayers(Player enemy)
+        {
+            var tmp = enemy;
+            enemy = this;
+            this.FileName = tmp.FileName;
+            this.Cards = tmp.Cards;
+            this.CardsAmount = tmp.CardsAmount;
+
         }
     }
 }

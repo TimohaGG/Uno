@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace Uno_V2.Core
 {
@@ -29,10 +27,8 @@ namespace Uno_V2.Core
         public void DeleteCards(int number)
         {
             Card[] tmp = new Card[Size-number];
-            for (int i = number-1, j=0; i < Size-1; i++, j++)
-            {
-                tmp[j] = Cards[i];
-            }
+            Array.Copy(Cards, 1, tmp,0 ,tmp.Length);
+            
             Cards = tmp;
             Size-=number;
         }

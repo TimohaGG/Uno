@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Uno_V2.Core.CardsCharacteristics;
 
 namespace Uno_V2.Core
@@ -8,7 +7,6 @@ namespace Uno_V2.Core
     {
         //----------fileds----------
         private Card[] deck;
-        private int ColorNumber = 4;
 
         CardsCharasteristics charasteristics;
         
