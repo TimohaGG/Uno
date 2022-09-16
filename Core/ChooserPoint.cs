@@ -12,7 +12,7 @@ namespace Uno_V2
         {
             index = 0;
             x = 2;
-            y = 17;
+            y = Console.CursorTop;
         }
 
         public void SetConsolePosition()

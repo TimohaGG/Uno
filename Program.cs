@@ -1,40 +1,35 @@
-﻿using Uno_V2.Core;
-using System;
+﻿using System;
+using Uno_V2.Core;
 namespace Uno_V2
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-           
-            Player player1 = new Player("Player1.txt");
-            Player player2 = new Player("Player2.txt");
+
+            Player.PlayersAmount = 4;
+            Player []players = new Player[Player.PlayersAmount];
+            players[0] = new Player("Player1.txt");
+            players[1] = new Player("Player2.txt");
+            players[2] = new Player("Player2.txt");
+            players[3] = new Player("Player3.txt");
+
+
+            Player.Current = players[Player.CurrentIndex];
+            Player.Next = players[Player.NextIndex];
+            bool Reverse = false;
+
             while (true)
             {
-                player1.PrintCards();
-               
-                Player.PrintEndDeck();
-                Console.SetCursorPosition(0, 14);
-                player2.PrintCards();
+                Player.Current = players[Player.CurrentIndex];
 
-                int index = player2.ChooseCard();
+                Player.PrintDecks(players, Player.CurrentIndex);
 
-                
-                
-                ////Для каждого вида карт сделать отдельный класс реализовующий интрефейс IUseble
-                
-                
-                  if (player2.Cards[index].Type != Card.CardType.Regular)
-                  {
-                      player2.ApplyCardProperty(player2.Cards[index], ref player1);
-                      
-                  }
-                else
-                {
-                    Player.SwitchPlayers(ref player1, ref player2);
-                }
+                int CardIndex = Player.Current.ChooseCard();
 
-                
+                Player.Current.UseCard(CardIndex);
+
+                NextPlayer();
                
                 Console.Clear();
             }
@@ -42,5 +37,24 @@ namespace Uno_V2
             Console.ReadLine();
         }
 
+        public static void NextPlayer()
+        {
+            if (Player.CurrentIndex + 1 < Player.PlayersAmount )
+            {
+                Player.CurrentIndex++;
+            }
+            else
+            {
+                Player.CurrentIndex = 0;
+            }
+            if (Player.NextIndex + 1 < Player.PlayersAmount)
+            {
+                Player.NextIndex++;
+            }
+            else
+            {
+                Player.NextIndex = 0;
+            }
+        }
     }
 }

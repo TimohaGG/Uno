@@ -1,7 +1,6 @@
 ﻿using System;
 
 
-
 namespace Uno_V2.Core
 {
     [Serializable]
@@ -14,7 +13,11 @@ namespace Uno_V2.Core
         private int CardsAmount = 0;
         private static Deck deck;
         private static Deck endDeck;
-
+        public static int CurrentIndex = 0;
+        public static int NextIndex = 1;
+        public static Player Current;
+        public static Player Next;
+        public static int PlayersAmount;
         static Player()
         {
             deck = new Deck(56);
@@ -31,8 +34,48 @@ namespace Uno_V2.Core
             
         }
 
-        
+        internal void UseCard(int cardIndex)
+        {
+            
+            if(Cards[cardIndex].Type == Card.CardType.Regular)
+            {
 
+            }
+            else
+            {
+                ApplyCardProperty(Cards[cardIndex]);
+            }
+            
+        }
+
+        private void ApplyCardProperty(Card CurrentCard)
+        {
+            if (CurrentCard.Suit == "+ 1")
+            {
+                Next.GiveCardsFromDeckToPlayer(1);
+                Console.Write("Следуйщий игрок берет 1 карту!!");
+                Console.ReadLine();
+            }
+            else if (CurrentCard.Suit == "ChD")
+            {
+                //SwitchPlayers(this,enemy);
+
+            }
+            else if (CurrentCard.Suit == " S ")
+            {
+                //SwitchPlayers(this,enemy);
+            }
+            else if (CurrentCard.Suit == "ChC")
+            {
+
+            }
+            else if (CurrentCard.Suit == "+ 2")
+            {
+                Next.GiveCardsFromDeckToPlayer(2);
+                Console.Write("Следуйщий игрок берет 2 карты!!");
+                Console.ReadLine();
+            }
+        }
         private void GiveCardsFromDeckToPlayer(int amount)
         {
             Card[] cardsTmp = new Card[CardsAmount+amount];
@@ -46,8 +89,22 @@ namespace Uno_V2.Core
             CardsAmount += amount;
             deck.DeleteCards(amount);
         }
+        public static void PrintDecks(Player[] players, int index)
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (i != index)
+                {
+                    players[i].PrintCards(true);
+                    Console.WriteLine();
+                }
 
-        public void PrintCards(bool isEmpty = false)
+            }
+            Player.PrintEndDeck();
+            players[index].PrintCards();
+        }
+
+        private void PrintCards(bool isEmpty = false)
         {
             int x=0;
             int y = Console.CursorTop;
@@ -71,12 +128,15 @@ namespace Uno_V2.Core
             
         }
 
-        public static void PrintEndDeck()
+        private static void PrintEndDeck()
         {
-            Console.SetCursorPosition(21, 7);
-            endDeck.Cards[endDeck.Cards.Length - 1].Print(21,7);
+            Console.SetCursorPosition(21, Console.CursorTop + 4);
+            endDeck.Cards[endDeck.Cards.Length - 1].Print(21, Console.CursorTop);
+            Console.SetCursorPosition(0, Console.CursorTop + 5);
         }
         
+        
+
         public int ChooseCard()
         {
             
@@ -187,34 +247,7 @@ namespace Uno_V2.Core
             return false;
         }
 
-        public void ApplyCardProperty(Card CurrentCard, ref Player enemy)
-        {
-            if (CurrentCard.Suit == "+ 1")
-            {
-                enemy.GiveCardsFromDeckToPlayer(1);
-            }
-            else if (CurrentCard.Suit == "ChD")
-            {
-                //SwitchPlayers(this,enemy);
+       
 
-            }
-            else if (CurrentCard.Suit == " S ")
-            {
-                //SwitchPlayers(this,enemy);
-            }
-            else if (CurrentCard.Suit == "ChC")
-            {
-
-            }
-            else if (CurrentCard.Suit == "+ 2")
-            {
-                enemy.GiveCardsFromDeckToPlayer(2);
-            }
-        }
-
-        public static void SwitchPlayers( ref Player player1,  ref Player player2)
-        {
-            (player1,player2) = (player2,player1);
-        }
     }
 }
