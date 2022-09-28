@@ -22,7 +22,7 @@ namespace Uno_V2.Core
         {
             deck = new Deck(56);
             deck.CreateFirst();
-            endDeck = new Deck(1);
+            endDeck = new Deck(0);
             endDeck.AddCardFrom(deck);
         }
         public Player(string Filename)
@@ -55,6 +55,7 @@ namespace Uno_V2.Core
                 Next.GiveCardsFromDeckToPlayer(1);
                 Console.Write("Следуйщий игрок берет 1 карту!!");
                 Console.ReadLine();
+                Program.NextPlayer();
             }
             else if (CurrentCard.Suit == "ChD")
             {
@@ -63,7 +64,7 @@ namespace Uno_V2.Core
             }
             else if (CurrentCard.Suit == " S ")
             {
-                //SwitchPlayers(this,enemy);
+                Program.NextPlayer();
             }
             else if (CurrentCard.Suit == "ChC")
             {
@@ -74,6 +75,7 @@ namespace Uno_V2.Core
                 Next.GiveCardsFromDeckToPlayer(2);
                 Console.Write("Следуйщий игрок берет 2 карты!!");
                 Console.ReadLine();
+                Program.NextPlayer();
             }
         }
         private void GiveCardsFromDeckToPlayer(int amount)
@@ -91,16 +93,20 @@ namespace Uno_V2.Core
         }
         public static void PrintDecks(Player[] players, int index)
         {
+            
             for (int i = 0; i < players.Length; i++)
             {
                 if (i != index)
                 {
-                    players[i].PrintCards(true);
+                    Console.Write(i);
+                    players[i].PrintCards();
                     Console.WriteLine();
                 }
 
             }
+            
             Player.PrintEndDeck();
+            Console.Write(index);
             players[index].PrintCards();
         }
 
@@ -131,7 +137,7 @@ namespace Uno_V2.Core
         private static void PrintEndDeck()
         {
             Console.SetCursorPosition(21, Console.CursorTop + 4);
-            endDeck.Cards[endDeck.Cards.Length - 1].Print(21, Console.CursorTop);
+            endDeck.Cards[endDeck.Cards.Length-1].Print(21, Console.CursorTop);
             Console.SetCursorPosition(0, Console.CursorTop + 5);
         }
         

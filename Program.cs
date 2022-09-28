@@ -9,10 +9,13 @@ namespace Uno_V2
 
             Player.PlayersAmount = 4;
             Player []players = new Player[Player.PlayersAmount];
-            players[0] = new Player("Player1.txt");
-            players[1] = new Player("Player2.txt");
-            players[2] = new Player("Player2.txt");
-            players[3] = new Player("Player3.txt");
+            string FileName;
+            for (int i = 0; i < Player.PlayersAmount; i++)
+            {
+                FileName = "Player" + i+1 + ".txt";
+                players[i] = new Player(FileName);
+            }
+            
 
 
             Player.Current = players[Player.CurrentIndex];
@@ -22,7 +25,7 @@ namespace Uno_V2
             while (true)
             {
                 Player.Current = players[Player.CurrentIndex];
-
+                Player.Next = players[Player.NextIndex];
                 Player.PrintDecks(players, Player.CurrentIndex);
 
                 int CardIndex = Player.Current.ChooseCard();

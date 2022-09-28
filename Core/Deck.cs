@@ -38,8 +38,17 @@ namespace Uno_V2.Core
 
         public void AddCardFrom (Deck deck)
         {
-            Cards[Size - 1] = deck.Cards[0];
+            int NewSize = Size + 1;
+            Deck NewDeck = new Deck(NewSize);
+            for (int i = 0; i < Size; i++)
+            {
+                NewDeck.Cards[i] = Cards[i];
+            }
+            NewDeck.Cards[Size] = deck.Cards[0];
             deck.DeleteCards(1);
+           
+            Cards = NewDeck.Cards;
+            Size = NewDeck.Size;
         }
        
 
