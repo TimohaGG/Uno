@@ -2,8 +2,10 @@
 using Uno_V2.Core;
 namespace Uno_V2
 {
+
     internal class Program
     {
+        public static bool Reverse = false;
         static void Main(string[] args)
         {
 
@@ -20,7 +22,7 @@ namespace Uno_V2
 
             Player.Current = players[Player.CurrentIndex];
             Player.Next = players[Player.NextIndex];
-            bool Reverse = false;
+            
 
             while (true)
             {
@@ -42,22 +44,45 @@ namespace Uno_V2
 
         public static void NextPlayer()
         {
-            if (Player.CurrentIndex + 1 < Player.PlayersAmount )
+            if (!Reverse)
             {
-                Player.CurrentIndex++;
+                if (Player.CurrentIndex + 1 < Player.PlayersAmount)
+                {
+                    Player.CurrentIndex++;
+                }
+                else
+                {
+                    Player.CurrentIndex = 0;
+                }
+                if (Player.NextIndex + 1 < Player.PlayersAmount)
+                {
+                    Player.NextIndex++;
+                }
+                else
+                {
+                    Player.NextIndex = 0;
+                }
             }
             else
             {
-                Player.CurrentIndex = 0;
+                if (Player.CurrentIndex - 1 >=0)
+                {
+                    Player.CurrentIndex--;
+                }
+                else
+                {
+                    Player.CurrentIndex = Player.PlayersAmount-1;
+                }
+                if (Player.NextIndex - 1 >=0)
+                {
+                    Player.NextIndex--;
+                }
+                else
+                {
+                    Player.NextIndex = Player.PlayersAmount - 1; ;
+                }
             }
-            if (Player.NextIndex + 1 < Player.PlayersAmount)
-            {
-                Player.NextIndex++;
-            }
-            else
-            {
-                Player.NextIndex = 0;
-            }
+            
         }
     }
 }
