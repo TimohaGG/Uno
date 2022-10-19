@@ -24,19 +24,21 @@ namespace Uno_V2.Core
             Cards = deckCreator.CreateDeck();
         }
 
-        public void DeleteCards(int number)
+        public void DeleteCards(int cardIndex)
         {
-            Card[] tmp = new Card[CardsAmount-number];
-            Array.Copy(Cards, number, tmp,0 ,tmp.Length);
-            //for (int i = number-1,j = 0; i < Size - number; i++, j++)
-            //{
-            //    tmp[j] = Cards[i];
-            //}
+            Card[] tmp = new Card[CardsAmount-1];
+            for (int i = 0; i < CardsAmount; i++)
+            {
+                if (i < cardIndex)
+                    tmp[i] = Cards[i];
+                else if (i > cardIndex)
+                    tmp[i - 1] = Cards[i];
+            }
             Cards = tmp;
-            CardsAmount-=number;
+            CardsAmount--;
         }
 
-        public void AddCardFrom (Deck deck)
+        public void AddCardFrom (Deck deck, int CardIndex = 0)
         {
             int NewSize = CardsAmount + 1;
             Deck NewDeck = new Deck(NewSize);
@@ -44,8 +46,8 @@ namespace Uno_V2.Core
             {
                 NewDeck.Cards[i] = Cards[i];
             }
-            NewDeck.Cards[CardsAmount] = deck.Cards[0];
-            deck.DeleteCards(1);
+            NewDeck.Cards[CardsAmount] = deck.Cards[CardIndex];
+            deck.DeleteCards(CardIndex);//
            
             Cards = NewDeck.Cards;
             CardsAmount = NewDeck.CardsAmount;

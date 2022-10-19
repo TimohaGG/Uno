@@ -42,15 +42,11 @@ namespace Uno_V2.Core
         internal void UseCard(int cardIndex)
         {
             
-            if(PlayerDeck.Cards[cardIndex].Type == Card.CardType.Regular)
-            {
-
-            }
-            else
+            if(PlayerDeck.Cards[cardIndex].Type != Card.CardType.Regular)
             {
                 ApplyCardProperty(ref PlayerDeck.Cards[cardIndex]);
             }
-            
+            endDeck.AddCardFrom(PlayerDeck, cardIndex);
         }
 
         private void ApplyCardProperty(ref Card CurrentCard)
