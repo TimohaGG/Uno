@@ -10,10 +10,10 @@ namespace Uno_V2.Core
 
         public string FileName { get; } = "Deck.txt";
 
-        private int Size;
+        public int CardsAmount;
         public Deck(int Size)
         {
-            this.Size = Size;
+            this.CardsAmount = Size;
             Cards = new Card[Size];
             
         }
@@ -26,29 +26,30 @@ namespace Uno_V2.Core
 
         public void DeleteCards(int number)
         {
-            Card[] tmp = new Card[Size-number];
+            Card[] tmp = new Card[CardsAmount-number];
             Array.Copy(Cards, number, tmp,0 ,tmp.Length);
             //for (int i = number-1,j = 0; i < Size - number; i++, j++)
             //{
             //    tmp[j] = Cards[i];
             //}
             Cards = tmp;
-            Size-=number;
+            CardsAmount-=number;
         }
 
         public void AddCardFrom (Deck deck)
         {
-            int NewSize = Size + 1;
+            int NewSize = CardsAmount + 1;
             Deck NewDeck = new Deck(NewSize);
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < CardsAmount; i++)
             {
                 NewDeck.Cards[i] = Cards[i];
             }
-            NewDeck.Cards[Size] = deck.Cards[0];
+            NewDeck.Cards[CardsAmount] = deck.Cards[0];
             deck.DeleteCards(1);
            
             Cards = NewDeck.Cards;
-            Size = NewDeck.Size;
+            CardsAmount = NewDeck.CardsAmount;
+            
         }
        
 

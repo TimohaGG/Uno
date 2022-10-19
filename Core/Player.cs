@@ -8,9 +8,9 @@ namespace Uno_V2.Core
     {
         public string FileName { get; private set; } 
 
-        public Card[] Cards;
+        public Deck PlayerDeck;
         private Card EmptyCard;
-        private int CardsAmount = 0;
+        
         private static Deck deck;
         private static Deck endDeck;
         public static int CurrentIndex = 0;
@@ -28,8 +28,13 @@ namespace Uno_V2.Core
         public Player(string Filename)
         {
             this.FileName = Filename;
-            Cards = new Card[CardsAmount];
-            GiveCardsFromDeckToPlayer(7);
+            
+            PlayerDeck = new Deck(0);
+            for (int i = 0; i < 7; i++)
+            {
+                PlayerDeck.AddCardFrom(deck);
+            }
+            
             EmptyCard = new Card();
             
         }
@@ -37,29 +42,29 @@ namespace Uno_V2.Core
         internal void UseCard(int cardIndex)
         {
             
-            if(Cards[cardIndex].Type == Card.CardType.Regular)
+            if(PlayerDeck.Cards[cardIndex].Type == Card.CardType.Regular)
             {
 
             }
             else
             {
-                ApplyCardProperty(Cards[cardIndex]);
+                ApplyCardProperty(ref PlayerDeck.Cards[cardIndex]);
             }
             
         }
 
-        private void ApplyCardProperty(Card CurrentCard)
+        private void ApplyCardProperty(ref Card CurrentCard)
         {
             if (CurrentCard.Suit == "+ 1")
             {
-                Next.GiveCardsFromDeckToPlayer(1);
+                Next.PlayerDeck.AddCardFrom(deck);
                 Console.Write("Следуйщий игрок берет 1 карту!!");
                 Console.ReadLine();
                 Program.NextPlayer();
             }
             else if (CurrentCard.Suit == "ChD")
             {
-                //SwitchPlayers(this,enemy);
+                SwitchPlayers();
 
             }
             else if (CurrentCard.Suit == " S ")
@@ -68,29 +73,23 @@ namespace Uno_V2.Core
             }
             else if (CurrentCard.Suit == "ChC")
             {
-
+                CurrentCard.ChangeColor();
             }
             else if (CurrentCard.Suit == "+ 2")
             {
-                Next.GiveCardsFromDeckToPlayer(2);
+                Next.PlayerDeck.AddCardFrom(deck);
+                Next.PlayerDeck.AddCardFrom(deck);
                 Console.Write("Следуйщий игрок берет 2 карты!!");
                 Console.ReadLine();
                 Program.NextPlayer();
             }
         }
-        private void GiveCardsFromDeckToPlayer(int amount)
+
+        private void SwitchPlayers()
         {
-            Card[] cardsTmp = new Card[CardsAmount+amount];
-            Array.Copy(Cards, cardsTmp, Cards.Length);
-            
-            for (int i = CardsAmount, j=0; i < CardsAmount + amount; i++,j++)
-            {
-                cardsTmp[i] = deck.Cards[j];
-            }
-            Cards = cardsTmp;
-            CardsAmount += amount;
-            deck.DeleteCards(amount);
+            Program.Reverse = Program.Reverse ? false : true;
         }
+
         public static void PrintDecks(Player[] players, int index)
         {
             
@@ -114,7 +113,7 @@ namespace Uno_V2.Core
         {
             int x=0;
             int y = Console.CursorTop;
-            for (int i = 0; i < CardsAmount; i++)
+            for (int i = 0; i < PlayerDeck.CardsAmount; i++)
             {
                 x = Console.CursorLeft;
 
@@ -124,7 +123,7 @@ namespace Uno_V2.Core
                 }
                 else
                 {
-                    Cards[i].Print(x, y);
+                    PlayerDeck.Cards[i].Print(x, y);
                 }
                 
                 x += 7;
@@ -160,7 +159,7 @@ namespace Uno_V2.Core
                     }
 
                 } while (key != ConsoleKey.Enter);
-            } while (!CanBeat(Cards[marker.index]));
+            } while (!CanBeat(PlayerDeck.Cards[marker.index]));
             return marker.index;
         }
 
@@ -213,7 +212,7 @@ namespace Uno_V2.Core
 
         private bool MoveRight(ref ChoosingMarker pt)
         {
-            if (pt.index + 1 < CardsAmount)
+            if (pt.index + 1 < PlayerDeck.CardsAmount)
             {
                 DeleteOldSelection();
                 pt.MoveXRight();

@@ -19,11 +19,6 @@ namespace Uno_V2
             }
             
 
-
-            Player.Current = players[Player.CurrentIndex];
-            Player.Next = players[Player.NextIndex];
-            
-
             while (true)
             {
                 Player.Current = players[Player.CurrentIndex];
@@ -46,41 +41,13 @@ namespace Uno_V2
         {
             if (!Reverse)
             {
-                if (Player.CurrentIndex + 1 < Player.PlayersAmount)
-                {
-                    Player.CurrentIndex++;
-                }
-                else
-                {
-                    Player.CurrentIndex = 0;
-                }
-                if (Player.NextIndex + 1 < Player.PlayersAmount)
-                {
-                    Player.NextIndex++;
-                }
-                else
-                {
-                    Player.NextIndex = 0;
-                }
+                Player.CurrentIndex = Player.CurrentIndex + 1 < Player.PlayersAmount ? Player.CurrentIndex+1 : 0;
+                Player.NextIndex = Player.NextIndex+1 < Player.PlayersAmount ? Player.NextIndex+1 : 0;
             }
             else
             {
-                if (Player.CurrentIndex - 1 >=0)
-                {
-                    Player.CurrentIndex--;
-                }
-                else
-                {
-                    Player.CurrentIndex = Player.PlayersAmount-1;
-                }
-                if (Player.NextIndex - 1 >=0)
-                {
-                    Player.NextIndex--;
-                }
-                else
-                {
-                    Player.NextIndex = Player.PlayersAmount - 1; ;
-                }
+                Player.CurrentIndex = Player.CurrentIndex - 1 >= 0 ? Player.CurrentIndex -= 1 : Player.PlayersAmount - 1;
+                Player.NextIndex = Player.NextIndex - 1 >= 0? Player.NextIndex -= 1 : Player.PlayersAmount - 1;
             }
             
         }
