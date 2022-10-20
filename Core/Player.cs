@@ -7,10 +7,9 @@ namespace Uno_V2.Core
     public class Player : ISerializable
     {
         public string FileName { get; private set; } 
-
-        public Deck PlayerDeck;
+        public Deck PlayerDeck { get; private set; }
         private Card EmptyCard;
-        
+
         private static Deck deck;
         private static Deck endDeck;
         public static int CurrentIndex = 0;
@@ -38,6 +37,8 @@ namespace Uno_V2.Core
             EmptyCard = new Card();
             
         }
+
+        
 
         internal void UseCard(int cardIndex)
         {
@@ -94,13 +95,13 @@ namespace Uno_V2.Core
                 if (i != index)
                 {
                     Console.Write(i);
-                    players[i].PrintCards();
+                    players[i].PrintCards(true);
                     Console.WriteLine();
                 }
 
             }
             
-            Player.PrintEndDeck();
+            PrintEndDeck();
             Console.Write(index);
             players[index].PrintCards();
         }
@@ -248,7 +249,65 @@ namespace Uno_V2.Core
             return false;
         }
 
-       
+        public bool hasApropriateCards()
+        {
+            for (int i = 0; i < PlayerDeck.CardsAmount; i++)
+            {
+                if (CanBeat(PlayerDeck.Cards[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public bool canStack()
+        {
+            for (int i = 0; i < PlayerDeck.CardsAmount; i++)
+            {
+                if (PlayerDeck.Cards[i].Suit == endDeck.Cards[endDeck.CardsAmount - 1].Suit)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public static void SaveAllToFile(Player[] players)
+        {
+            for (int i = 0; i < PlayersAmount; i++)
+            {
+                players[i].SaveToFile();
+            }
+        }
 
+        private void SaveToFile()
+        {
+            Serialaizator serialaizator = new Serialaizator();
+            serialaizator.Serialize(FileName, this);
+            serialaizator.Serialize(endDeck.FileName, endDeck);
+            
+        }
+
+        
+        public static void LoadFromFile(ref Player[] players)
+        {
+            Serialaizator serialaizator = new Serialaizator();
+            for (int i = 0; i < PlayersAmount; i++)
+            {
+                players[i] = (Player)serialaizator.Deserialize(players[i]);
+            }
+            players[0].LoadToFile();
+        }
+        private void LoadToFile()
+        {
+            Serialaizator serialaizator = new Serialaizator();
+            endDeck = (Deck)serialaizator.Deserialize(endDeck);
+        }
+
+        public void GiveCard()
+        {
+            Current.PlayerDeck.AddCardFrom(deck);
+        }
     }
 }

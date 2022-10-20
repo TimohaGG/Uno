@@ -9,7 +9,7 @@ namespace Uno_V2
         static void Main(string[] args)
         {
 
-            Player.PlayersAmount = 4;
+            Player.PlayersAmount = 2;
             Player []players = new Player[Player.PlayersAmount];
             string FileName;
             for (int i = 0; i < Player.PlayersAmount; i++)
@@ -17,17 +17,55 @@ namespace Uno_V2
                 FileName = "Player" + i+1 + ".txt";
                 players[i] = new Player(FileName);
             }
-            
 
+            //Player.SaveAllToFile(players);
+
+            Player.LoadFromFile(ref players);
+            
+            //Player.PrintDecks(players, Player.CurrentIndex);
             while (true)
             {
-                Player.Current = players[Player.CurrentIndex];
-                Player.Next = players[Player.NextIndex];
-                Player.PrintDecks(players, Player.CurrentIndex);
+                do
+                {
+                    Player.Current = players[Player.CurrentIndex];
+                    Player.Next = players[Player.NextIndex];
+                    Player.PrintDecks(players, Player.CurrentIndex);
+                    while (!Player.Current.hasApropriateCards())
+                    {
+                        
+                        Console.WriteLine("Player is taking card");
+                        Console.ReadLine();
+                        Player.Current.GiveCard();
+                        Console.Clear();
+                        Player.PrintDecks(players, Player.CurrentIndex);
+                        Console.ReadLine();
+                    }
 
-                int CardIndex = Player.Current.ChooseCard();
+                    int CardIndex = Player.Current.ChooseCard();
+                    Player.Current.UseCard(CardIndex);
 
-                Player.Current.UseCard(CardIndex);
+                    Console.WriteLine("N - следуйщий игрок");
+                    bool canContinue = Player.Current.canStack();
+                    if (canContinue)
+                    {
+                        Console.WriteLine("R - повторить ход");
+                    }
+
+                    ConsoleKey key = Console.ReadKey().Key;
+                    if(key == ConsoleKey.N)
+                    {
+                        break;
+                    }
+                    else if(canContinue && key == ConsoleKey.R)
+                    {
+                        Console.Clear();
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
 
                 NextPlayer();
                
