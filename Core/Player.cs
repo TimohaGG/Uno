@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 
 namespace Uno_V2.Core
@@ -8,77 +9,83 @@ namespace Uno_V2.Core
     {
         public string FileName { get; private set; } 
         public Deck PlayerDeck { get; private set; }
-        private Card EmptyCard;
 
-        private static Deck deck;
-        private static Deck endDeck;
+        private Card EmptyCard;
+        private bool isFirstMove = true;
+
         public static int CurrentIndex = 0;
         public static int NextIndex = 1;
         public static Player Current;
         public static Player Next;
         public static int PlayersAmount;
+
+        private static Deck deck;
+        private static Deck endDeck;
         static Player()
         {
             deck = new Deck(56);
             deck.CreateFirst();
             endDeck = new Deck(0);
-            endDeck.AddCardFrom(deck);
+            endDeck.AddCardFrom(deck,mustBeRegular:true);
         }
-        public Player(string Filename)
+        public Player(string FileName)
         {
-            this.FileName = Filename;
-            
+            this.FileName = FileName;
             PlayerDeck = new Deck(0);
             for (int i = 0; i < 7; i++)
             {
                 PlayerDeck.AddCardFrom(deck);
             }
-            
             EmptyCard = new Card();
-            
         }
-
-        
-
         internal void UseCard(int cardIndex)
         {
             
             if(PlayerDeck.Cards[cardIndex].Type != Card.CardType.Regular)
             {
-                ApplyCardProperty(ref PlayerDeck.Cards[cardIndex]);
+                PlayerDeck.Cards[cardIndex] = ApplyCardProperty(PlayerDeck.Cards[cardIndex]);
             }
             endDeck.AddCardFrom(PlayerDeck, cardIndex);
+            isFirstMove = false;
         }
 
-        private void ApplyCardProperty(ref Card CurrentCard)
+        private Card ApplyCardProperty(Card CurrentCard)
         {
-            if (CurrentCard.Suit == "+ 1")
+           
+            switch (CurrentCard.Suit)
             {
-                Next.PlayerDeck.AddCardFrom(deck);
-                Console.Write("Следуйщий игрок берет 1 карту!!");
-                Console.ReadLine();
-                Program.NextPlayer();
+                case "+ 1":
+                    {
+                        AplyGiveCards(1);
+                    }break;
+                case "ChD":
+                    {
+                        SwitchPlayers();
+                    }break;
+                case " S ": {
+                        Program.NextPlayer();
+                    }break;
+                case "ChC":
+                    {
+                        CurrentCard.ChangeColor();
+                    }break;
+                case "+ 2":
+                    {
+                        AplyGiveCards(2);
+                        CurrentCard.ChangeColor();
+                    }break;
             }
-            else if (CurrentCard.Suit == "ChD")
-            {
-                SwitchPlayers();
+            return CurrentCard;
+        }
 
-            }
-            else if (CurrentCard.Suit == " S ")
-            {
-                Program.NextPlayer();
-            }
-            else if (CurrentCard.Suit == "ChC")
-            {
-                CurrentCard.ChangeColor();
-            }
-            else if (CurrentCard.Suit == "+ 2")
+        private void AplyGiveCards(int amount)
+        {
+            Console.Write($"Следуйщий игрок берет карты: {amount} !!");
+            Console.ReadLine();
+            Program.NextPlayer();
+            for (int i = 0; i < amount; i++)
             {
                 Next.PlayerDeck.AddCardFrom(deck);
-                Next.PlayerDeck.AddCardFrom(deck);
-                Console.Write("Следуйщий игрок берет 2 карты!!");
-                Console.ReadLine();
-                Program.NextPlayer();
             }
         }
 
@@ -87,12 +94,19 @@ namespace Uno_V2.Core
             Program.Reverse = Program.Reverse ? false : true;
         }
 
-        public static void PrintDecks(Player[] players, int index)
+        public static void PrintDecks(Player[] players)
         {
-            
+
+            PrintDecksInactive(players);
+            PrintEndDeck();
+            PrintCurrent();
+        }
+
+
+        private static void PrintDecksInactive(Player[] players) {
             for (int i = 0; i < players.Length; i++)
             {
-                if (i != index)
+                if (i != CurrentIndex)
                 {
                     Console.Write(i);
                     players[i].PrintCards(true);
@@ -100,10 +114,7 @@ namespace Uno_V2.Core
                 }
 
             }
-            
-            PrintEndDeck();
-            Console.Write(index);
-            players[index].PrintCards();
+           
         }
 
         private void PrintCards(bool isEmpty = false)
@@ -133,11 +144,15 @@ namespace Uno_V2.Core
         private static void PrintEndDeck()
         {
             Console.SetCursorPosition(21, Console.CursorTop + 4);
-            endDeck.Cards[endDeck.Cards.Length-1].Print(21, Console.CursorTop);
+            endDeck.Cards[endDeck.Cards.Count-1].Print(21, Console.CursorTop);
             Console.SetCursorPosition(0, Console.CursorTop + 5);
         }
         
-        
+        static void PrintCurrent()
+        {
+            Console.Write(CurrentIndex);
+            Current.PrintCards();
+        }
 
         public int ChooseCard()
         {
@@ -156,7 +171,7 @@ namespace Uno_V2.Core
                     }
 
                 } while (key != ConsoleKey.Enter);
-            } while (!CanBeat(PlayerDeck.Cards[marker.index]));
+            } while (!canBeat(PlayerDeck.Cards[marker.index]));
             return marker.index;
         }
 
@@ -168,29 +183,13 @@ namespace Uno_V2.Core
 
         private bool TryMooving(ChoosingMarker pt ,ref ConsoleKey key)
         {
-            switch (key)
+            return key switch
             {
-                case ConsoleKey.LeftArrow:
-                    {
-                        return MoveLeft(ref pt);
-                    }
-                    
-                case ConsoleKey.RightArrow:
-                    {
-                        return MoveRight(ref pt);
-                    }
-
-                case ConsoleKey.Enter:
-                    {
-                        return true;
-                    }
-                default:
-                    {
-                        pt.SetConsolePosition();
-                        return false;
-                    }
-                    
-            }
+                ConsoleKey.LeftArrow => MoveLeft(ref pt),
+                ConsoleKey.RightArrow => MoveRight(ref pt),
+                ConsoleKey.Enter => true,
+                _ =>  false
+            };
         }
 
         private bool MoveLeft(ref ChoosingMarker pt)
@@ -200,7 +199,6 @@ namespace Uno_V2.Core
                 DeleteOldSelection();
                 pt.MoveXLeft();
                 pt.index--;
-                
                 PrintChooser(pt);
                 return true;
             }
@@ -213,14 +211,12 @@ namespace Uno_V2.Core
             {
                 DeleteOldSelection();
                 pt.MoveXRight();
-                pt.index++;
-                
+                pt.index++;                
                 PrintChooser(pt);
                 return true;
             }
             return false;
         }
-
         private void DeleteOldSelection()
         {
             int x = Console.CursorLeft;
@@ -228,22 +224,19 @@ namespace Uno_V2.Core
             Console.SetCursorPosition(x - 2, y);
             Console.Write(" ");
         }
-        
-        
-
-        private bool CanBeat(Card toUse)
+        private bool canBeat(Card toUse)
         {
-            int LastIndex = endDeck.Cards.Length - 1;
+            int LastIndex = endDeck.Cards.Count - 1;
             
             if (toUse.Suit == endDeck.Cards[LastIndex].Suit)
             {
                 return true;
             }
-            else if(toUse.Color == endDeck.Cards[LastIndex].Color)
+            else if(toUse.Color == endDeck.Cards[LastIndex].Color && isFirstMove)
             {
                 return true;
             }
-            else if(toUse.Color == ConsoleColor.Gray) {
+            else if(toUse.Color == ConsoleColor.Gray && isFirstMove) {
                 return true;
             }
             return false;
@@ -253,7 +246,7 @@ namespace Uno_V2.Core
         {
             for (int i = 0; i < PlayerDeck.CardsAmount; i++)
             {
-                if (CanBeat(PlayerDeck.Cards[i]))
+                if (canBeat(PlayerDeck.Cards[i]))
                 {
                     return true;
                 }
@@ -297,6 +290,7 @@ namespace Uno_V2.Core
             {
                 players[i] = (Player)serialaizator.Deserialize(players[i]);
             }
+           
             players[0].LoadToFile();
         }
         private void LoadToFile()
@@ -308,6 +302,30 @@ namespace Uno_V2.Core
         public void GiveCard()
         {
             Current.PlayerDeck.AddCardFrom(deck);
+        }
+
+        static public void CreatePlayers(Player[] players)
+        {
+            string FileName;
+            for (int i = 0; i < PlayersAmount; i++)
+            {
+                FileName = "Player" + i + 1 + ".txt";
+                players[i] = new Player(FileName);
+            }
+        }
+
+        public void GivePlayerCards()
+        {
+            Console.WriteLine("Player is taking card");
+            Console.ReadLine();
+            Player.Current.GiveCard();
+            Console.Clear();
+
+        }
+
+        public void ResetFirstMoove()
+        {
+            isFirstMove = true;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Uno_V2
         public ChoosingMarker()
         {
             index = 0;
-            x = 2;
+            x = 3;
             y = Console.CursorTop;
         }
 

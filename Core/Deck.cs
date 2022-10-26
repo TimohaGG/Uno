@@ -1,12 +1,15 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using static Uno_V2.Core.Card;
 
 namespace Uno_V2.Core
 {
     [Serializable]
     public class Deck : ISerializable
     {
-        public Card[] Cards { get; private set; }
+        //public Card[] Cards { get; private set; }
+        public List<Card> Cards { get; private set; }
 
         public string FileName { get; } = "Deck.txt";
 
@@ -14,8 +17,11 @@ namespace Uno_V2.Core
         public Deck(int Size)
         {
             this.CardsAmount = Size;
-            Cards = new Card[Size];
-            
+            Cards = new List<Card>();
+            for (int i = 0; i < Size; i++)
+            {
+                Cards.Add(new Card());
+            }      
         }
 
         public void CreateFirst()
@@ -26,32 +32,22 @@ namespace Uno_V2.Core
 
         public void DeleteCards(int cardIndex)
         {
-            Card[] tmp = new Card[CardsAmount-1];
-            for (int i = 0; i < CardsAmount; i++)
-            {
-                if (i < cardIndex)
-                    tmp[i] = Cards[i];
-                else if (i > cardIndex)
-                    tmp[i - 1] = Cards[i];
-            }
-            Cards = tmp;
+            Cards.RemoveAt(cardIndex);
             CardsAmount--;
         }
 
-        public void AddCardFrom (Deck deck, int CardIndex = 0)
+        public void AddCardFrom (Deck deck, int CardIndex = 0, bool mustBeRegular = false)
         {
-            int NewSize = CardsAmount + 1;
-            Deck NewDeck = new Deck(NewSize);
-            for (int i = 0; i < CardsAmount; i++)
+            if (mustBeRegular)
             {
-                NewDeck.Cards[i] = Cards[i];
+                while (deck.Cards[CardIndex].Type!= CardType.Regular)
+                {
+                    CardIndex++;
+                }
             }
-            NewDeck.Cards[CardsAmount] = deck.Cards[CardIndex];
-            deck.DeleteCards(CardIndex);//
-           
-            Cards = NewDeck.Cards;
-            CardsAmount = NewDeck.CardsAmount;
-            
+            Cards.Add(deck.Cards[CardIndex]);
+            deck.DeleteCards(CardIndex);
+            CardsAmount++;
         }
        
 

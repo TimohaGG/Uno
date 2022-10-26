@@ -1,5 +1,6 @@
 ﻿using System;
 using Uno_V2.Core;
+using static Uno_V2.Core.Player;
 namespace Uno_V2
 {
 
@@ -9,43 +10,50 @@ namespace Uno_V2
         static void Main(string[] args)
         {
 
-            Player.PlayersAmount = 2;
-            Player []players = new Player[Player.PlayersAmount];
-            string FileName;
-            for (int i = 0; i < Player.PlayersAmount; i++)
-            {
-                FileName = "Player" + i+1 + ".txt";
-                players[i] = new Player(FileName);
-            }
+            PlayersAmount = 2;
+            Player []players = new Player[PlayersAmount];
+
+            CreatePlayers(players);
 
             //Player.SaveAllToFile(players);
 
-            Player.LoadFromFile(ref players);
+            //Player.LoadFromFile(ref players);
             
             //Player.PrintDecks(players, Player.CurrentIndex);
             while (true)
             {
                 do
                 {
-                    Player.Current = players[Player.CurrentIndex];
-                    Player.Next = players[Player.NextIndex];
-                    Player.PrintDecks(players, Player.CurrentIndex);
-                    while (!Player.Current.hasApropriateCards())
+                    Current = players[CurrentIndex];
+                    Next = players[NextIndex];
+                    PrintDecks(players);
+                    int amountOfTakenCards = 0;
+
+                    while (!Current.hasApropriateCards())
                     {
-                        
-                        Console.WriteLine("Player is taking card");
+                        if (amountOfTakenCards == 2)
+                        {
+                            Console.WriteLine("Все!");
+                            Console.ReadLine();
+                            break;
+
+                        }
+                        Current.GivePlayerCards();
+                        PrintDecks(players);
                         Console.ReadLine();
-                        Player.Current.GiveCard();
-                        Console.Clear();
-                        Player.PrintDecks(players, Player.CurrentIndex);
-                        Console.ReadLine();
+                        amountOfTakenCards++;
+
                     }
 
-                    int CardIndex = Player.Current.ChooseCard();
-                    Player.Current.UseCard(CardIndex);
+                    if(amountOfTakenCards == 2)
+                    {
+                        break;
+                    }
+                    int CardIndex = Current.ChooseCard();
+                    Current.UseCard(CardIndex);
 
                     Console.WriteLine("N - следуйщий игрок");
-                    bool canContinue = Player.Current.canStack();
+                    bool canContinue = Current.canStack();
                     if (canContinue)
                     {
                         Console.WriteLine("R - повторить ход");
@@ -79,15 +87,16 @@ namespace Uno_V2
         {
             if (!Reverse)
             {
-                Player.CurrentIndex = Player.CurrentIndex + 1 < Player.PlayersAmount ? Player.CurrentIndex+1 : 0;
-                Player.NextIndex = Player.NextIndex+1 < Player.PlayersAmount ? Player.NextIndex+1 : 0;
+                CurrentIndex = CurrentIndex + 1 < PlayersAmount ? CurrentIndex+1 : 0;
+                NextIndex = NextIndex+1 < PlayersAmount ? NextIndex+1 : 0;
+
             }
             else
             {
-                Player.CurrentIndex = Player.CurrentIndex - 1 >= 0 ? Player.CurrentIndex -= 1 : Player.PlayersAmount - 1;
-                Player.NextIndex = Player.NextIndex - 1 >= 0? Player.NextIndex -= 1 : Player.PlayersAmount - 1;
+                CurrentIndex = CurrentIndex - 1 >= 0 ? CurrentIndex -= 1 : PlayersAmount - 1;
+                NextIndex = NextIndex - 1 >= 0? NextIndex -= 1 : PlayersAmount - 1;
             }
-            
+            Current.ResetFirstMoove();
         }
     }
 }
