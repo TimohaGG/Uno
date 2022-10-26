@@ -7,18 +7,21 @@ namespace Uno_V2
     internal class Program
     {
         public static bool Reverse = false;
+        public static int PlayersAmount;
+        public static Player[] players { get; private set; }
+
         static void Main(string[] args)
         {
 
             PlayersAmount = 2;
-            Player []players = new Player[PlayersAmount];
+            players = new Player[PlayersAmount];
 
             CreatePlayers(players);
 
             //Player.SaveAllToFile(players);
 
-            //Player.LoadFromFile(ref players);
-            
+            Player.LoadFromFile();
+
             //Player.PrintDecks(players, Player.CurrentIndex);
             while (true)
             {
@@ -27,52 +30,41 @@ namespace Uno_V2
                     Current = players[CurrentIndex];
                     Next = players[NextIndex];
                     PrintDecks(players);
-                    int amountOfTakenCards = 0;
 
-                    while (!Current.hasApropriateCards())
+
+                    if (Current.CanUseMove(players))
                     {
-                        if (amountOfTakenCards == 2)
+                        int CardIndex = Current.ChooseCard();
+                        Current.UseCard(CardIndex);
+
+                        Console.WriteLine("N - следуйщий игрок");
+                        bool canContinue = Current.canStack();
+                        if (canContinue)
                         {
-                            Console.WriteLine("Все!");
-                            Console.ReadLine();
-                            break;
-
+                            Console.WriteLine("R - повторить ход");
                         }
-                        Current.GivePlayerCards();
-                        PrintDecks(players);
-                        Console.ReadLine();
-                        amountOfTakenCards++;
 
-                    }
-
-                    if(amountOfTakenCards == 2)
-                    {
-                        break;
-                    }
-                    int CardIndex = Current.ChooseCard();
-                    Current.UseCard(CardIndex);
-
-                    Console.WriteLine("N - следуйщий игрок");
-                    bool canContinue = Current.canStack();
-                    if (canContinue)
-                    {
-                        Console.WriteLine("R - повторить ход");
-                    }
-
-                    ConsoleKey key = Console.ReadKey().Key;
-                    if(key == ConsoleKey.N)
-                    {
-                        break;
-                    }
-                    else if(canContinue && key == ConsoleKey.R)
-                    {
-                        Console.Clear();
-                        continue;
+                        ConsoleKey key = Console.ReadKey().Key;
+                        if (key == ConsoleKey.N)
+                        {
+                            break;
+                        }
+                        else if (canContinue && key == ConsoleKey.R)
+                        {
+                            Console.Clear();
+                            continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                     else
                     {
-                        break;
+
                     }
+
+                    
                 } while (true);
 
                 NextPlayer();

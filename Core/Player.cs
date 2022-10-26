@@ -17,7 +17,7 @@ namespace Uno_V2.Core
         public static int NextIndex = 1;
         public static Player Current;
         public static Player Next;
-        public static int PlayersAmount;
+        
 
         private static Deck deck;
         private static Deck endDeck;
@@ -268,7 +268,7 @@ namespace Uno_V2.Core
         
         public static void SaveAllToFile(Player[] players)
         {
-            for (int i = 0; i < PlayersAmount; i++)
+            for (int i = 0; i < Program.PlayersAmount; i++)
             {
                 players[i].SaveToFile();
             }
@@ -283,15 +283,15 @@ namespace Uno_V2.Core
         }
 
         
-        public static void LoadFromFile(ref Player[] players)
+        public static void LoadFromFile()
         {
             Serialaizator serialaizator = new Serialaizator();
-            for (int i = 0; i < PlayersAmount; i++)
+            for (int i = 0; i < Program.PlayersAmount; i++)
             {
-                players[i] = (Player)serialaizator.Deserialize(players[i]);
+                Program.players[i] = (Player)serialaizator.Deserialize(Program.players[i]);
             }
-           
-            players[0].LoadToFile();
+
+            Program.players[0].LoadToFile();
         }
         private void LoadToFile()
         {
@@ -307,7 +307,7 @@ namespace Uno_V2.Core
         static public void CreatePlayers(Player[] players)
         {
             string FileName;
-            for (int i = 0; i < PlayersAmount; i++)
+            for (int i = 0; i < Program.PlayersAmount; i++)
             {
                 FileName = "Player" + i + 1 + ".txt";
                 players[i] = new Player(FileName);
@@ -326,6 +326,38 @@ namespace Uno_V2.Core
         public void ResetFirstMoove()
         {
             isFirstMove = true;
+        }
+
+        public bool CanUseMove(Player[] players)
+        {
+            if (!Current.hasApropriateCards())
+            {
+                if (!Current.GiveCardsUntilCanContinueOrSkip())
+                {
+                    Console.WriteLine("Вы исчерпали свои попытки!");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool GiveCardsUntilCanContinueOrSkip()
+        {
+            int amountOfTakenCards = 0;
+            do
+            {
+                if (amountOfTakenCards == 2)
+                {
+
+                    return false;
+                }
+                Current.GivePlayerCards();
+                PrintDecks(Program.players);
+                Console.ReadLine();
+                amountOfTakenCards++;
+
+            } while (!Current.hasApropriateCards());
+            return false;
         }
     }
 }
