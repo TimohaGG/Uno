@@ -8,7 +8,7 @@ namespace Uno_V2.Core
     [Serializable]
     public class Deck : ISerializable
     {
-        //public Card[] Cards { get; private set; }
+      
         public List<Card> Cards { get; private set; }
 
         public string FileName { get; } = "Deck.txt";
@@ -49,7 +49,20 @@ namespace Uno_V2.Core
             deck.DeleteCards(CardIndex);
             CardsAmount++;
         }
-       
+
+        public void RefillCardsDeck(Deck deck)
+        {
+            deck.Cards.AddRange(Cards);
+            deck.CardsAmount = deck.Cards.Count;
+            //Cards.CopyTo(deck.Cards.ToArray());
+            Cards.Clear();
+            CardsAmount = 0;
+        }
+
+        public bool lowCardsAmount()
+        {
+            return CardsAmount <= 10;
+        }
 
     }
 }

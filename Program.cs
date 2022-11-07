@@ -16,62 +16,46 @@ namespace Uno_V2
             PlayersAmount = 2;
             players = new Player[PlayersAmount];
 
-            CreatePlayers(players);
+            CreatePlayers();
 
             //Player.SaveAllToFile(players);
 
             Player.LoadFromFile();
 
             //Player.PrintDecks(players, Player.CurrentIndex);
-            while (true)
+
+            do
             {
-                do
+                Current = players[CurrentIndex];
+                Next = players[NextIndex];
+                PrintDecks(players);
+
+                if (lowCardsAmount())
                 {
-                    Current = players[CurrentIndex];
-                    Next = players[NextIndex];
-                    PrintDecks(players);
+                    RefillDeck();
+                }
 
+                if (Current.CanUseMove())
+                {
 
-                    if (Current.CanUseMove(players))
+                    Current.UseCard(Current.ChooseCard());
+
+                    if (!Current.canContinue())
                     {
-                        int CardIndex = Current.ChooseCard();
-                        Current.UseCard(CardIndex);
-
-                        Console.WriteLine("N - следуйщий игрок");
-                        bool canContinue = Current.canStack();
-                        if (canContinue)
-                        {
-                            Console.WriteLine("R - повторить ход");
-                        }
-
-                        ConsoleKey key = Console.ReadKey().Key;
-                        if (key == ConsoleKey.N)
-                        {
-                            break;
-                        }
-                        else if (canContinue && key == ConsoleKey.R)
-                        {
-                            Console.Clear();
-                            continue;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        NextPlayer();
+                        continue;
                     }
-                    else
-                    {
+                }
+                else
+                {
+                    Console.WriteLine("Вы исчерпали свои попытки!");
+                    NextPlayer();
+                    Console.ReadLine();
+                    Console.Clear();
+                }
 
-                    }
 
-                    
-                } while (true);
-
-                NextPlayer();
-               
-                Console.Clear();
-            }
-            
+            } while (true);
             Console.ReadLine();
         }
 
@@ -88,7 +72,7 @@ namespace Uno_V2
                 CurrentIndex = CurrentIndex - 1 >= 0 ? CurrentIndex -= 1 : PlayersAmount - 1;
                 NextIndex = NextIndex - 1 >= 0? NextIndex -= 1 : PlayersAmount - 1;
             }
-            Current.ResetFirstMoove();
+           // Current.ResetFirstMoove();
         }
     }
 }
