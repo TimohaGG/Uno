@@ -52,11 +52,16 @@ namespace Uno_V2.Core
 
         public void RefillCardsDeck(Deck deck)
         {
+            //deck.Cards.AddRange(Cards);
+            Card lastCard = Cards.Last();
+            Cards.Remove(lastCard);
             deck.Cards.AddRange(Cards);
-            deck.CardsAmount = deck.Cards.Count;
-            //Cards.CopyTo(deck.Cards.ToArray());
+            DeckCreator d = new DeckCreator(deck.Cards);
+            d.Reshuffle();
             Cards.Clear();
-            CardsAmount = 0;
+            Cards.Add(lastCard);
+            deck.CardsAmount = deck.Cards.Count;
+            CardsAmount = Cards.Count;
         }
 
         public bool lowCardsAmount()

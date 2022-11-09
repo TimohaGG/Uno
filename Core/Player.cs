@@ -11,7 +11,7 @@ namespace Uno_V2.Core
         public Deck PlayerDeck { get; private set; }
 
         private Card EmptyCard;
-        //private bool isFirstMove = true;
+        private bool isFirstMove = true;
 
         public static int CurrentIndex = 0;
         public static int NextIndex = 1;
@@ -251,19 +251,26 @@ namespace Uno_V2.Core
         private bool canBeat(Card toUse)
         {
             int LastIndex = endDeck.Cards.Count - 1;
-
-            if (toUse.Suit == endDeck.Cards[LastIndex].Suit)
+            if (!isFirstMove && toUse.Suit == endDeck.Cards[LastIndex].Suit)
             {
                 return true;
             }
-            else if (toUse.Color == endDeck.Cards[LastIndex].Color )
+            else
             {
-                return true;
+                if (toUse.Suit == endDeck.Cards[LastIndex].Suit)
+                {
+                    return true;
+                }
+                else if (toUse.Color == endDeck.Cards[LastIndex].Color)
+                {
+                    return true;
+                }
+                else if (toUse.Color == ConsoleColor.Gray)
+                {
+                    return true;
+                }
             }
-            else if (toUse.Color == ConsoleColor.Gray )
-            {
-                return true;
-            }
+            
             return false;
         }
 
@@ -284,6 +291,7 @@ namespace Uno_V2.Core
             bool canContinue = Current.canStack();
             if (canContinue)
             {
+                isFirstMove = false;
                 Console.WriteLine("R - повторить ход");
                 Console.WriteLine("N - следуйщий игрок");
                 switch (Console.ReadKey().Key)
@@ -301,6 +309,7 @@ namespace Uno_V2.Core
                         }break;
                 }
             }
+            isFirstMove = true;
             Console.Clear();
             return false;
             
@@ -361,6 +370,7 @@ namespace Uno_V2.Core
         public static void RefillDeck()
         {
             endDeck.RefillCardsDeck(deck);
+            
         }
         //---------Saveing/loading---------
 

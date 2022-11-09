@@ -48,7 +48,7 @@ namespace Uno_V2.Core
             }
         }
 
-        private void Reshuffle()
+        public void Reshuffle()
         {
             Random rand = new Random();
             Card tmp;
