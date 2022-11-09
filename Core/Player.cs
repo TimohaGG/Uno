@@ -11,7 +11,7 @@ namespace Uno_V2.Core
         public Deck PlayerDeck { get; private set; }
 
         private Card EmptyCard;
-        private bool isFirstMove = true;
+        public bool isFirstMove = true;
 
         public static int CurrentIndex = 0;
         public static int NextIndex = 1;
@@ -56,32 +56,38 @@ namespace Uno_V2.Core
 
         public void UseCard(int cardIndex)
         {
-            
-            if(PlayerDeck.Cards[cardIndex].Type != Card.CardType.Regular)
+            isFirstMove = false;
+            if (PlayerDeck.Cards[cardIndex].Type != Card.CardType.Regular)
             {
                 PlayerDeck.Cards[cardIndex] = ApplyCardProperty(PlayerDeck.Cards[cardIndex]);
             }
             endDeck.AddCardFrom(PlayerDeck, cardIndex);
-            //isFirstMove = false;
+            
         }
 
         private Card ApplyCardProperty(Card CurrentCard)
         {
-           
+            
             switch (CurrentCard.Suit)
             {
                 case "+ 1":
                     {
                         AplyGiveCards(1);
-                       // Program.NextPlayer();
-                    }break;
+                        Current.isFirstMove = true;
+                        //Program.NextPlayer();
+                        //Program.NextPlayer();
+                    }
+                    break;
                 case "ChD":
                     {
                         SwitchPlayers();
                     }break;
                 case " S ": {
                         Program.NextPlayer();
-                    }break;
+                        Program.NextPlayer();
+                        Current.isFirstMove = true;
+                    }
+                    break;
                 case "ChC":
                     {
                         CurrentCard.ChangeColor();
@@ -90,6 +96,7 @@ namespace Uno_V2.Core
                     {
                         AplyGiveCards(2);
                         CurrentCard.ChangeColor();
+                        Current.isFirstMove = true;
                         //Program.NextPlayer();
                     }
                     break;
@@ -101,7 +108,8 @@ namespace Uno_V2.Core
         {
             Console.Write($"Следуйщий игрок берет карты: {amount} !!");
             Console.ReadLine();
-            Program.NextPlayer();
+            //Program.NextPlayer();
+            
             for (int i = 0; i < amount; i++)
             {
                 Next.PlayerDeck.AddCardFrom(deck);
@@ -116,7 +124,7 @@ namespace Uno_V2.Core
         //---------Printers---------
         public static void PrintDecks(Player[] players)
         {
-
+            Console.Clear();
             PrintDecksInactive();
             PrintEndDeck();
             PrintCurrentDeck();
@@ -251,9 +259,9 @@ namespace Uno_V2.Core
         private bool canBeat(Card toUse)
         {
             int LastIndex = endDeck.Cards.Count - 1;
-            if (!isFirstMove && toUse.Suit == endDeck.Cards[LastIndex].Suit)
+            if (!isFirstMove)
             {
-                return true;
+                return toUse.Suit == endDeck.Cards[LastIndex].Suit;
             }
             else
             {
@@ -318,15 +326,32 @@ namespace Uno_V2.Core
 
         public bool CanUseMove()
         {
-            if (!Current.hasApropriateCards())
-            {
-                if (!Current.GiveCardsUntilCanContinueOrSkip())
-                {
+            //if (!Current.hasApropriateCards())
+            //{
+            //    if (!Current.GiveCardsUntilCanContinueOrSkip())
+            //    {
                     
-                    return false;
-                }
+            //        return false;
+            //    }
+            //}
+            //return true;
+
+            if (Current.hasApropriateCards())
+            {
+                return true;
             }
-            return true;
+            else if (!isFirstMove)
+            {
+                return false;
+            }
+            else if (Current.GiveCardsUntilCanContinueOrSkip())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private bool GiveCardsUntilCanContinueOrSkip()

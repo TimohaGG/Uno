@@ -39,21 +39,22 @@ namespace Uno_V2
                 {
 
                     Current.UseCard(Current.ChooseCard());
-
-                    if (!Current.canContinue())
-                    {
-                        NextPlayer();
-                        continue;
-                    }
+                   
+                    //if (!Current.canContinue())
+                    //{
+                    //    NextPlayer();
+                    //    continue;
+                    //}
                 }
                 else
                 {
+                    Current.isFirstMove = true;
                     Console.WriteLine("Вы исчерпали свои попытки!");
                     NextPlayer();
                     Console.ReadLine();
-                    Console.Clear();
+                   
                 }
-
+                
 
             } while (true);
             Console.ReadLine();
@@ -61,6 +62,7 @@ namespace Uno_V2
 
         public static void NextPlayer()
         {
+            
             if (!Reverse)
             {
                 CurrentIndex = CurrentIndex + 1 < PlayersAmount ? CurrentIndex+1 : 0;
