@@ -49,7 +49,7 @@ namespace Uno_V2
                 else
                 {
                     Current.isFirstMove = true;
-                    Console.WriteLine("Вы исчерпали свои попытки!");
+                    Console.WriteLine("Очередь следуйщего игрока!");
                     NextPlayer();
                     Console.ReadLine();
                    
