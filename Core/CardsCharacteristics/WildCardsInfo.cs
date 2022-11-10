@@ -12,8 +12,8 @@ namespace Uno_V2.Core.CardsCharacteristics
         public string[] CardsSuits { get; }
         public int FirstCardNum { get; set; } = 52;
         public Card.CardType Type { get; } = Card.CardType.Wild;
-        public const int ColorAmount = 2;
-        public const int SuitAmount = 2;
+        private const int ColorAmount = 2;
+        private const int SuitAmount = 2;
 
         public WildCardsInfo()
         {

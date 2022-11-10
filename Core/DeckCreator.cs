@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Uno_V2.Core.CardsCharacteristics;
 
 namespace Uno_V2.Core
@@ -6,18 +7,18 @@ namespace Uno_V2.Core
     public class DeckCreator
     {
         //----------fileds----------
-        private Card[] deck;
+        private List<Card> deck;
 
         CardsCharasteristics charasteristics;
         
-        public DeckCreator(Card[] deck)
+        public DeckCreator(List<Card> deck)
         {
             this.deck = deck;
             charasteristics = new CardsCharasteristics();
         }
 
         //----------methods----------
-        public Card[] CreateDeck()
+        public List<Card> CreateDeck()
         {
           
             AddCards(charasteristics.RegularInf);
@@ -47,15 +48,15 @@ namespace Uno_V2.Core
             }
         }
 
-        private void Reshuffle()
+        public void Reshuffle()
         {
             Random rand = new Random();
             Card tmp;
             int randValue;
             
-            for (int i = 0; i < deck.Length; i++)
+            for (int i = 0; i < deck.Count; i++)
             {
-                randValue = rand.Next(0, deck.Length);
+                randValue = rand.Next(0, deck.Count);
                 tmp = deck[i];
                 deck[i] = deck[randValue];
                 deck[randValue] = tmp;

@@ -1,93 +1,80 @@
 ﻿using System;
 using Uno_V2.Core;
+using static Uno_V2.Core.Player;
 namespace Uno_V2
 {
 
     internal class Program
     {
         public static bool Reverse = false;
+        public static int PlayersAmount;
+        public static Player[] players { get; private set; }
+
         static void Main(string[] args)
         {
 
-            Player.PlayersAmount = 2;
-            Player []players = new Player[Player.PlayersAmount];
-            string FileName;
-            for (int i = 0; i < Player.PlayersAmount; i++)
-            {
-                FileName = "Player" + i+1 + ".txt";
-                players[i] = new Player(FileName);
-            }
+            PlayersAmount = 2;
+            players = new Player[PlayersAmount];
+
+            CreatePlayers();
 
             //Player.SaveAllToFile(players);
 
-            Player.LoadFromFile(ref players);
-            
+            Player.LoadFromFile();
+
             //Player.PrintDecks(players, Player.CurrentIndex);
-            while (true)
+
+            do
             {
-                do
+                Current = players[CurrentIndex];
+                Next = players[NextIndex];
+                PrintDecks(players);
+
+                if (lowCardsAmount())
                 {
-                    Player.Current = players[Player.CurrentIndex];
-                    Player.Next = players[Player.NextIndex];
-                    Player.PrintDecks(players, Player.CurrentIndex);
-                    while (!Player.Current.hasApropriateCards())
-                    {
-                        
-                        Console.WriteLine("Player is taking card");
-                        Console.ReadLine();
-                        Player.Current.GiveCard();
-                        Console.Clear();
-                        Player.PrintDecks(players, Player.CurrentIndex);
-                        Console.ReadLine();
-                    }
+                    RefillDeck();
+                }
 
-                    int CardIndex = Player.Current.ChooseCard();
-                    Player.Current.UseCard(CardIndex);
+                if (Current.CanUseMove())
+                {
 
-                    Console.WriteLine("N - следуйщий игрок");
-                    bool canContinue = Player.Current.canStack();
-                    if (canContinue)
-                    {
-                        Console.WriteLine("R - повторить ход");
-                    }
+                    Current.UseCard(Current.ChooseCard());
+                   
+                    //if (!Current.canContinue())
+                    //{
+                    //    NextPlayer();
+                    //    continue;
+                    //}
+                }
+                else
+                {
+                    Current.isFirstMove = true;
+                    Console.WriteLine("Вы исчерпали свои попытки!");
+                    NextPlayer();
+                    Console.ReadLine();
+                   
+                }
+                
 
-                    ConsoleKey key = Console.ReadKey().Key;
-                    if(key == ConsoleKey.N)
-                    {
-                        break;
-                    }
-                    else if(canContinue && key == ConsoleKey.R)
-                    {
-                        Console.Clear();
-                        continue;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                } while (true);
-
-                NextPlayer();
-               
-                Console.Clear();
-            }
-            
+            } while (true);
             Console.ReadLine();
         }
 
         public static void NextPlayer()
         {
+            
             if (!Reverse)
             {
-                Player.CurrentIndex = Player.CurrentIndex + 1 < Player.PlayersAmount ? Player.CurrentIndex+1 : 0;
-                Player.NextIndex = Player.NextIndex+1 < Player.PlayersAmount ? Player.NextIndex+1 : 0;
+                CurrentIndex = CurrentIndex + 1 < PlayersAmount ? CurrentIndex+1 : 0;
+                NextIndex = NextIndex+1 < PlayersAmount ? NextIndex+1 : 0;
+
             }
             else
             {
-                Player.CurrentIndex = Player.CurrentIndex - 1 >= 0 ? Player.CurrentIndex -= 1 : Player.PlayersAmount - 1;
-                Player.NextIndex = Player.NextIndex - 1 >= 0? Player.NextIndex -= 1 : Player.PlayersAmount - 1;
+                CurrentIndex = CurrentIndex - 1 >= 0 ? CurrentIndex -= 1 : PlayersAmount - 1;
+                NextIndex = NextIndex - 1 >= 0? NextIndex -= 1 : PlayersAmount - 1;
             }
-            
+           // Current.ResetFirstMoove();
         }
     }
 }
