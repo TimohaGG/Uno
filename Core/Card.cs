@@ -36,8 +36,8 @@ namespace Uno_V2.Core
         //----------methods----------
         public void Print(int x, int y)
         {
-            
-           
+
+
             Console.ForegroundColor = Color;
 
             Console.WriteLine("*****");
@@ -47,7 +47,7 @@ namespace Uno_V2.Core
             Console.WriteLine("*****");
             Console.SetCursorPosition(x, ++y);
             Console.ResetColor();
-           
+
         }
 
         internal void ChangeColor()
@@ -59,28 +59,35 @@ namespace Uno_V2.Core
             Console.WriteLine("4. Желтый");
             int choise;
 
-            do {
+            do
+            {
                 choise = int.Parse(Console.ReadLine());
             } while (choise < 0 || choise > 4);
 
             switch (choise)
             {
-                case 1:{
+                case 1:
+                    {
                         Color = ConsoleColor.Blue;
                     }
                     break;
-                case 2: {
+                case 2:
+                    {
                         Color = ConsoleColor.Green;
                     }
                     break;
-                case 3: {
+                case 3:
+                    {
                         Color = ConsoleColor.Red;
-                    } break;
-                case 4: {
+                    }
+                    break;
+                case 4:
+                    {
                         Color = ConsoleColor.Yellow;
-                    } break;
+                    }
+                    break;
             }
-            Console.Clear();
+
         }
     }
 }

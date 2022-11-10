@@ -26,6 +26,7 @@ namespace Uno_V2
 
             do
             {
+
                 Current = players[CurrentIndex];
                 Next = players[NextIndex];
                 PrintDecks(players);
@@ -34,27 +35,25 @@ namespace Uno_V2
                 {
                     RefillDeck();
                 }
-
-                if (Current.CanUseMove())
+                while (Current.CanUseMove())
                 {
 
-                    Current.UseCard(Current.ChooseCard());
-                   
-                    //if (!Current.canContinue())
-                    //{
-                    //    NextPlayer();
-                    //    continue;
-                    //}
+                    Current.AddCardToUse();
+                    Console.Clear();
+                    PrintDecks(players);
                 }
-                else
+
+                if (Current.usedCards())
                 {
-                    Current.isFirstMove = true;
-                    Console.WriteLine("Очередь следуйщего игрока!");
-                    NextPlayer();
-                    Console.ReadLine();
-                   
+                    Current.UseCards();
                 }
-                
+
+                Current.isFirstMove = true;
+                Console.WriteLine("Очередь следуйщего игрока!");
+                NextPlayer();
+                Console.ReadLine();
+                //}
+
 
             } while (true);
             Console.ReadLine();
@@ -62,19 +61,19 @@ namespace Uno_V2
 
         public static void NextPlayer()
         {
-            
+
             if (!Reverse)
             {
-                CurrentIndex = CurrentIndex + 1 < PlayersAmount ? CurrentIndex+1 : 0;
-                NextIndex = NextIndex+1 < PlayersAmount ? NextIndex+1 : 0;
+                CurrentIndex = CurrentIndex + 1 < PlayersAmount ? CurrentIndex + 1 : 0;
+                NextIndex = NextIndex + 1 < PlayersAmount ? NextIndex + 1 : 0;
 
             }
             else
             {
                 CurrentIndex = CurrentIndex - 1 >= 0 ? CurrentIndex -= 1 : PlayersAmount - 1;
-                NextIndex = NextIndex - 1 >= 0? NextIndex -= 1 : PlayersAmount - 1;
+                NextIndex = NextIndex - 1 >= 0 ? NextIndex -= 1 : PlayersAmount - 1;
             }
-           // Current.ResetFirstMoove();
+            // Current.ResetFirstMoove();
         }
     }
 }

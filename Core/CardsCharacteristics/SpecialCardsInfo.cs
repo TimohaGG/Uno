@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Uno_V2.Core.CardsCharacteristics
 {
@@ -13,9 +9,9 @@ namespace Uno_V2.Core.CardsCharacteristics
         public int FirstCardNum { get; set; } = 40;
         public Card.CardType Type { get; } = Card.CardType.Special;
 
-        public const int ColorAmount=4;
+        public const int ColorAmount = 4;
         public const int SuitAmount = 3;
-        
+
         public SpecialCardsInfo()
         {
             ColorVariants = new ConsoleColor[ColorAmount]

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Uno_V2.Core.CardsCharacteristics
 {
     public class RegularCardInfo : ICharacterisable
     {
-        public ConsoleColor[] ColorVariants { get;  }
-        public string[] CardsSuits { get ; }
+        public ConsoleColor[] ColorVariants { get; }
+        public string[] CardsSuits { get; }
         public int FirstCardNum { get; set; } = 0;
         public Card.CardType Type { get; } = Card.CardType.Regular;
         public const int ColorAmount = 4;

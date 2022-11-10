@@ -8,7 +8,7 @@ namespace Uno_V2.Core
     [Serializable]
     public class Deck : ISerializable
     {
-      
+
         public List<Card> Cards { get; private set; }
 
         public string FileName { get; } = "Deck.txt";
@@ -21,7 +21,7 @@ namespace Uno_V2.Core
             for (int i = 0; i < Size; i++)
             {
                 Cards.Add(new Card());
-            }      
+            }
         }
 
         public void CreateFirst()
@@ -36,11 +36,11 @@ namespace Uno_V2.Core
             CardsAmount--;
         }
 
-        public void AddCardFrom (Deck deck, int CardIndex = 0, bool mustBeRegular = false)
+        public void AddCardFrom(Deck deck, int CardIndex = 0, bool mustBeRegular = false)
         {
             if (mustBeRegular)
             {
-                while (deck.Cards[CardIndex].Type!= CardType.Regular)
+                while (deck.Cards[CardIndex].Type != CardType.Regular)
                 {
                     CardIndex++;
                 }

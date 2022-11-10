@@ -10,7 +10,7 @@ namespace Uno_V2.Core
         private List<Card> deck;
 
         CardsCharasteristics charasteristics;
-        
+
         public DeckCreator(List<Card> deck)
         {
             this.deck = deck;
@@ -20,16 +20,16 @@ namespace Uno_V2.Core
         //----------methods----------
         public List<Card> CreateDeck()
         {
-          
+
             AddCards(charasteristics.RegularInf);
             AddCards(charasteristics.SpecInf);
             AddCards(charasteristics.WildInf);
-            
+
             Reshuffle();
             return deck;
         }
 
-        
+
         private void AddCards(ICharacterisable chrctr)
         {
             int ColorsAmount = chrctr.ColorVariants.Length;
@@ -42,7 +42,7 @@ namespace Uno_V2.Core
             {
                 for (int suitN = 0; suitN < SuitsAmount; suitN++)
                 {
-                    deck[chrctr.FirstCardNum++] = 
+                    deck[chrctr.FirstCardNum++] =
                         new Card(CardsSuits[suitN], Colors[colorN], Type);
                 }
             }
@@ -53,7 +53,7 @@ namespace Uno_V2.Core
             Random rand = new Random();
             Card tmp;
             int randValue;
-            
+
             for (int i = 0; i < deck.Count; i++)
             {
                 randValue = rand.Next(0, deck.Count);
@@ -62,7 +62,7 @@ namespace Uno_V2.Core
                 deck[randValue] = tmp;
 
             }
-            
+
         }
     }
 }
