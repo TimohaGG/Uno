@@ -13,7 +13,7 @@ namespace Uno_V2
         static void Main(string[] args)
         {
 
-            PlayersAmount = 3;
+            PlayersAmount = 2;
             players = new Player[PlayersAmount];
 
             CreatePlayers();
@@ -38,9 +38,13 @@ namespace Uno_V2
                     {
                         RefillDeck();
                     }
-                    Current.AddCardToUse();
-                    Console.Clear();
-                    PrintDecks(players);
+                    if (Current.AddCardToUse())
+                    {
+                        Console.Clear();
+                        PrintDecks(players);
+                    }
+                    else break;
+                    
                 }
 
                 if (Current.usedCards())

@@ -218,6 +218,10 @@ namespace Uno_V2.Core
                 do
                 {
                     key = Console.ReadKey().Key;
+                    if(key== ConsoleKey.Escape)
+                    {
+                        return -1;
+                    }
                     if (!TryMooving(marker, ref key))
                     {
                         marker.SetConsolePosition();
@@ -307,17 +311,26 @@ namespace Uno_V2.Core
 
 
 
-        public void AddCardToUse()
+        public bool AddCardToUse()
         {
             if (cardToUse == null)
             {
                 cardToUse = new List<Card>();
             }
-            Card choosen = PlayerDeck.Cards[ChooseCard()];
-            cardToUse.Add(choosen);
-            isFirstMove = false;
-
-            AddCardToEnddeck(choosen);
+            Card choosen;
+            try
+            {
+                choosen = PlayerDeck.Cards[ChooseCard()];
+                cardToUse.Add(choosen);
+                isFirstMove = false;
+                AddCardToEnddeck(choosen);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
+            }
+            
         }
         //---------No appropriate cards---------
 
