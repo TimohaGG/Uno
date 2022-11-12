@@ -111,7 +111,7 @@ namespace Uno_V2.Core
                     }
                     break;
             }
-            if (CurrentCard.Suit != "ChD" && CurrentCard.Suit != "ChC")
+            if (CurrentCard.Suit != "ChD" && CurrentCard.Suit != "ChC"&&CurrentCard.Type!= Card.CardType.Regular)
             {
                 Program.NextPlayer();
             }
@@ -241,6 +241,7 @@ namespace Uno_V2.Core
                 ConsoleKey.LeftArrow => MoveLeft(ref pt),
                 ConsoleKey.RightArrow => MoveRight(ref pt),
                 ConsoleKey.Enter => true,
+                ConsoleKey.Escape =>false,
                 _ => false
             };
         }

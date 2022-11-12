@@ -13,14 +13,14 @@ namespace Uno_V2
         static void Main(string[] args)
         {
 
-            PlayersAmount = 2;
+            PlayersAmount = 3;
             players = new Player[PlayersAmount];
 
             CreatePlayers();
 
             //Player.SaveAllToFile(players);
 
-            Player.LoadFromFile();
+            //Player.LoadFromFile();
 
             //Player.PrintDecks(players, Player.CurrentIndex);
 
@@ -31,13 +31,13 @@ namespace Uno_V2
                 Next = players[NextIndex];
                 PrintDecks(players);
 
-                if (lowCardsAmount())
-                {
-                    RefillDeck();
-                }
+                
                 while (Current.CanUseMove())
                 {
-
+                    if (lowCardsAmount())
+                    {
+                        RefillDeck();
+                    }
                     Current.AddCardToUse();
                     Console.Clear();
                     PrintDecks(players);
