@@ -20,11 +20,6 @@ namespace Uno_V2
             Console.SetCursorPosition(x + 1, y);
         }
 
-        public void PrintMarker()
-        {
-            Console.Write(sym);
-        }
-
         public void MoveXLeft()
         {
             x -= 7;
@@ -32,6 +27,16 @@ namespace Uno_V2
         public void MoveXRight()
         {
             x += 7;
+        }
+       
+        public void Print()
+        {
+            Console.SetCursorPosition(x, y);
+            PrintMarker();
+        }
+        private void PrintMarker()
+        {
+            Console.Write(sym);
         }
     }
 }

@@ -14,9 +14,9 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
-<PropertyGroup>
-   <LangVersion>8.0</LangVersion>
- </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -56,14 +56,22 @@
     <Compile Include="Core\CardsCharacteristics\WildCardsInfo.cs" />
     <Compile Include="Core\Deck.cs" />
     <Compile Include="Core\DeckCreator.cs" />
+    <Compile Include="Core\NumberGuesser.cs" />
+    <Compile Include="Core\Player\ChoosingCard.cs" />
+    <Compile Include="Core\Player\LoadSave.cs" />
+    <Compile Include="Core\Player\NoApropriateCards.cs" />
+    <Compile Include="Core\Player\Print.cs" />
+    <Compile Include="Core\Player\UsingCards.cs" />
     <Compile Include="Core\Serialization\ISerializable.cs" />
-    <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Player\Player.cs" />
     <Compile Include="Core\Serialization\Serialaizator.cs" />
+    <Compile Include="Menu\Class1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,7 +12,7 @@ namespace Uno_V2
 
         static void Main(string[] args)
         {
-
+            
             PlayersAmount = 2;
             players = new Player[PlayersAmount];
 
@@ -21,9 +21,7 @@ namespace Uno_V2
             //Player.SaveAllToFile(players);
 
             //Player.LoadFromFile();
-
-            //Player.PrintDecks(players, Player.CurrentIndex);
-
+            
             do
             {
 
@@ -47,18 +45,19 @@ namespace Uno_V2
                     
                 }
 
-                if (Current.usedCards())
+                if (Current.cardsWereUsed())
                 {
                     Current.UseCards();
                 }
-
+                if (Current.PlayerDeck.oneCardLeft())
+                {
+                    Current.GuessNumber();
+                }
                 Current.isFirstMove = true;
+                Console.Clear();
                 Console.WriteLine("Очередь следуйщего игрока!");
                 NextPlayer();
                 Console.ReadLine();
-                //}
-
-
             } while (true);
             Console.ReadLine();
         }

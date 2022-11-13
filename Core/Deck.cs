@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using static Uno_V2.Core.Card;
 
 namespace Uno_V2.Core
@@ -30,7 +31,7 @@ namespace Uno_V2.Core
             Cards = deckCreator.CreateDeck();
         }
 
-        public void DeleteCards(int cardIndex)
+        private void DeleteCards(int cardIndex)
         {
             Cards.RemoveAt(cardIndex);
             CardsAmount--;
@@ -69,5 +70,9 @@ namespace Uno_V2.Core
             return CardsAmount <= 10;
         }
 
+        public bool oneCardLeft()
+        {
+            return CardsAmount == 1;
+        }
     }
 }
